@@ -1,0 +1,96 @@
+#phoneContainer {
+    position: static;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+
+#phoneContainer>a {
+    position: absolute;
+    top: 0px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+}
+
+#phone {
+    --theme_hue: 0;
+    --theme_saturation: 0%;
+    --theme_light_vdark: 0%;
+    --theme_light_dark: 6%;
+    --theme_light_middark: 13%;
+    --theme_light_mid: 19%;
+    background: hsl(var(--theme_hue), var(--theme_saturation), var(--theme_light_middark));
+    top: 1vh;
+    height: 85vh;
+    width: 85vw;
+    position: relative;
+    border-radius: 25px;
+    border: #000 solid;
+    z-index: 100001;
+    padding: 6px 2px 2px 2px;
+    overflow: hidden;
+}
+
+#phone>#head {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: hsl(var(--theme_hue), var(--theme_saturation), var(--theme_light_vdark));
+    height: 4vh;
+    padding: 0.5em 2em 0em 1em;
+    font-size: 2.5vh;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+#phone>#head>#signalStrength {
+    width: auto;
+    display: inline-block;
+    right: 10px;
+    position: absolute;
+}
+
+#phone>#phonebg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+#phone #phonecontents {
+    position: relative;
+    top: 4vh;
+}
+
+#phone #mainMenu {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(auto-fill, 65px);
+}
+
+.phone_app_icon {
+    text-align: center;
+    margin: 5px;
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#phone #mainMenu_time {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 10vh;
+    height: 30vh;
+}

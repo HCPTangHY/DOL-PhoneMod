@@ -1,0 +1,16 @@
+:: Phone utils [widget]
+
+<<widget "phone_app" container>>
+	<<set _c = _contents>>
+	<div style='justify-content: center;display: flex;'>
+		<<capture _c>>
+			<<link '<<phone_app_icon _args[0]>>'>>
+				_c
+			<</link>>
+		<</capture>>
+	</div>
+<</widget>>
+
+<<widget "phone_app_icon">>
+	<<print "<img class='phone_app_icon' width='100%' src='img/phoneApp/"+_args[0]+".png'>">>
+<</widget>>

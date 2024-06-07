@@ -1,0 +1,45 @@
+:: Phone Function [widget]
+
+<<widget "phone_title">>
+    <<setupTabs>>
+	<div id="overlayTabs" class="tab">
+		<<closeButtonMobile>>
+		<<button "手机">>
+			<<replace #customOverlayContent>><<phone>><</replace>>
+		<</button>>
+	</div>
+	<<closeButton>>
+<</widget>>
+
+<<widget "phone">>
+	<div id="phoneContainer">
+		<div id="phone">
+			<div id="head"><<ampm>><span id="signalStrength">📳🔋</span></div>
+			<img id='phonebg' src='img/phoneBG.png'>
+			<div id="phonecontents"><<phone_MainMenu>></div>
+		</div>
+	</div>
+<</widget>>
+
+<<widget "phone_MainMenu">>
+	<div id="mainMenu_time"><<ampm>></div>
+	<div id="mainMenu">
+		<<phone_app 'nyangalary'>>
+			<<replace #phonecontents>>
+				<<nyangalary_content>>
+			<</replace>>
+		<</phone_app>>
+		<<phone_app 'nyanchat'>>
+		<</phone_app>>
+		<<phone_app 'nyancall'>>
+		<</phone_app>>
+		<<phone_app 'nyanbook'>>
+		<</phone_app>>
+	</div>
+<</widget>>
+
+<<widget "nyangalary_content">>
+	1s1221
+	122113
+	1213
+<</widget>>

@@ -1,0 +1,38 @@
+{
+    "version": "PRE-EA-0.0.001",
+    "scriptFileList_earlyload": [],
+    "additionFile": [],
+    "addonPlugin": [{
+            "modName": "TweeReplacer",
+            "addonName": "TweeReplacerAddon",
+            "modVersion": "1.6.0",
+            "params": [{
+                "passage": "Bedroom",
+                "findString": "<<bedclotheson \"bed\">>",
+                "replace": "<<bedclotheson \"bed\">>[[魂穿猫国|Start Nyantopia]]"
+            }, {
+                "passage": "StoryCaption",
+                "findRegex": "(?<=(<<button SOCIAL>>|<<button 社交>>).*\n.*\n.*>>)",
+                "replace": "<<button 手机>><<overlayReplace \"phone\">><</button>>"
+            }, {
+                "passage": "overlayReplace",
+                "findString": "<<switch _key>>",
+                "replace": "<<switch _key>><<case \"phone\">><<replace #customOverlayTitle>><<phone_title>><</replace>><<replace #customOverlayContent>><<phone>><</replace>>"
+            }]
+        },
+        {
+            "modName": "ModLoader DoL ImageLoaderHook",
+            "addonName": "ImageLoaderAddon",
+            "modVersion": "2.10.1"
+        }
+    ],
+    "dependenceInfo": [{
+            "modName": "TweeReplacer",
+            "version": "1.6.0"
+        },
+        {
+            "modName": "ModLoader DoL ImageLoaderHook",
+            "version": "2.10.1"
+        }
+    ]
+}
