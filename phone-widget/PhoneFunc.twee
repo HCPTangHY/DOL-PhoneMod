@@ -4,7 +4,8 @@
     <<setupTabs>>
 	<div id="overlayTabs" class="tab">
 		<<closeButtonMobile>>
-		<<button "手机">>
+		<<set _t=L.phone>>
+		<<button _t>>
 			<<replace #customOverlayContent>><<phone>><</replace>>
 		<</button>>
 	</div>
@@ -24,12 +25,15 @@
 <<widget "phone_MainMenu">>
 	<div id="mainMenu_time"><<ampm>></div>
 	<div id="mainMenu">
-		<<phone_app 'nyangalary'>>
+		<<phone_app 'galary'>>
 			<<replace #phonecontents>>
-				<<nyangalary_content>>
+				<<galary_content>>
 			<</replace>>
 		<</phone_app>>
-		<<phone_app 'nyanchat'>>
+		<<phone_app 'wecat'>>
+			<<replace #phonecontents>>
+				<<wecat_content>>
+			<</replace>>
 		<</phone_app>>
 		<<phone_app 'nyancall'>>
 		<</phone_app>>
@@ -38,8 +42,75 @@
 	</div>
 <</widget>>
 
-<<widget "nyangalary_content">>
-	1s1221
-	122113
-	1213
+<<widget "galary_content">>
+	Will coming soon!
+<</widget>>
+<<widget "wecat_content">>
+	<<run $(".phonebg").toggle();>>
+	<div id="wecatcontainer">
+		<div id="wecatheader"><<=L.wecatTitle>></div>
+		<div id="wecatheader">
+			<<set _m = L.wecatMsgTitle;_fl = L.wecatFriListTitle>>
+			<div class="item" style="left: 0px;">
+				<<link _m>><<replace #wecatlist>><<wecat_msgList>><</replace>><</link>>
+			</div>
+			<div class="item" style="right: 0px;">
+				<<link _fl>>
+					<<replace #wecatlist>><<wecat_friendlist>><</replace>>
+				<</link>>
+			</div>
+		</div>
+		<div id="wecatlist">
+			<<wecat_msgList>>
+		</div>
+	</div>
+<</widget>>
+
+<<widget "wecat_friendlist">>
+	<<for _i=0; _i < V.NPCName.length; _i++ >>
+		<<print `<<set _name = V.NPCName[_i].nam>>
+		<<link `+V.NPCName[_i].nam+`>>
+			<<replace #wecatlist>><<wecat_chat `+V.NPCName[_i].nam+`>><</replace>>
+		<</link>><br>`>>
+	<</for>>
+<</widget>>
+
+<<widget "wecat_msgList">>
+	<<if !$chatList>>
+		<<set $chatList to {Bailey:[{sender:"Bailey",msg:"记得交钱",sendTime:[Time.year,Time.mouth,Time.mouthDay].join(".")+[Time.hour,Time.minute].join(":")}]}>>
+	<</if>>
+	/* <<script>>
+		if (!V.chatList) {Object.defineProperty(V,"chatList",{value:{Bailey:[{sender:"Bailey",msg:"记得交钱",sendTime:[Time.year,Time.mouth,Time.mouthDay].join(".")+[Time.hour,Time.minute].join(":")}]}})}
+		if (!V.chatList[T.npc]) {Object.defineProperty(V.chatList,T.npc,{value:[]})}
+	<</script>> */
+	<<for _i=0; _i<Object.keys($chatList).length; _i++>>
+		<<set _name=Object.keys($chatList)[_i]>>
+		<div class="wecatlist-item">
+			<div class="wecatlist-item-avatar">
+				<img width='100%' src='img/phoneApp/wecat.png'>
+			</div>
+			<span class="wecatlist-item-name">_name</span>
+			<span class="wecatlist-item-msg"><<=$chatList[_name][$chatList[_name].length-1].msg>></span>
+		</div>
+	<</for>>
+<</widget>>
+
+<<widget "wecat_chat">>
+	<<set _npc=_args[0]>>
+	<<if !$chatList[_npc]>>
+		<<set $chatList[_npc] to []>>
+	<</if>>
+	<div id="wecatchat_content">
+	<<for _i=0; _i<V.chatList[_npc].length; _i++>>
+		<<=V.chatList[T.npc][_i].sender>>：<<=V.chatList[T.npc][_i].msg>><br>
+	<</for>>
+	</div>
+	<br>
+	<<set _L=L>>
+	<<link _L['greetingMsg']>>
+		<<run window.send_msg("greetingMsg")>>
+	<</link>><br>
+	<<link _L['selfieMsg']>>
+		<<run window.send_msg("selfieMsg")>>
+	<</link>><br>
 <</widget>>
