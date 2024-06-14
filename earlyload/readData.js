@@ -46,13 +46,12 @@
     let mod = window.modSC2DataManager.getModLoader().getModByNameOne("PhoneMod");
     let addtionFlies = mod.mod.bootJson.additionFile;
     let l = {};
+    let PMEvents = []
     for (f of addtionFlies) {
         if (f.search(".csv") != -1) {
             let file = await (mod.zip.zip.file(f).async("string"));
             let csv = read_csv(file)
-            let fileName = f.replace("database/", "");
-            fileName = fileName.replace(".csv", "");
-            Object.defineProperty(window, fileName, { value: csv });
+            PMEvents = PMEvents.concat(csv)
         }
         if (f.search("localization") != -1) {
             let file = await (mod.zip.zip.file(f).async("string"));
@@ -66,5 +65,6 @@
             console.log(l)
         }
     }
+    Object.defineProperty(window, "PMEvents", { value: PMEvents })
     Object.defineProperty(window, 'L', { value: l[navigator.language] });
 })();

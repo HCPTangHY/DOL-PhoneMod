@@ -1,0 +1,3 @@
+id,npc,preMsg,requirement,replies
+Bailey_greeting,Bailey,greetingMsg,"Time.hour>=7&&Time.hour<=22","Bailey_greeting.A:Bailey_greetingA"
+Bailey_greetingA,Bailey,Bailey_greeting.A,,

@@ -66,6 +66,7 @@
 #phone #phonecontents {
     position: relative;
     top: 4vh;
+    height: 96%;
 }
 
 #phone #mainMenu {
@@ -93,90 +94,4 @@
     text-align: center;
     font-size: 10vh;
     height: 30vh;
-}
-
-#wecatcontainer {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-#wecatheader {
-    text-align: center;
-    font-size: 25px;
-    font-family: sans-serif;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(243, 247, 248);
-    border: 2px #e1e7ec solid;
-    color: #000;
-    width: 100%;
-    padding: 15px 0px
-}
-
-#wecatheader>.item {
-    position: absolute;
-    width: 50%;
-    color: rgb(68, 68, 68);
-    font-size: 20px;
-    height: 30px;
-    margin: 2px 2px 2px 2px;
-}
-
-#wecatlist {
-    overflow: auto;
-    overflow-y: scroll;
-    background-color: rgb(243, 247, 248);
-    box-sizing: border-box;
-    color: rgb(44, 62, 80);
-    display: block;
-    font-size: 15px;
-    grid-column-end: 1;
-    grid-column-start: 1;
-    grid-row-end: 2;
-    grid-row-start: 2;
-    scroll-snap-align: center;
-    flex: 1;
-}
-
-.wecatlist-item {
-    display: grid;
-    border: 1px #e1e7ec solid;
-    grid-template-columns: 75px 15px 1fr 15px 75px;
-    grid-template-rows: 35px 35px 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    width: 100%;
-    padding: 15px 25px
-}
-
-.wecatlist-item-avatar {
-    grid-area: 1/1/3/2;
-    cursor: pointer
-}
-
-.wecatlist-item-name {
-    grid-area: 1/3/2/4;
-    font-size: 25px;
-    font-family: sans-serif;
-    font-weight: 1000;
-    color: #2a323e;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: none
-}
-
-.wecatlist-item-msg {
-    grid-area: 2/3/3/4;
-    font-size: 20px;
-    font-family: sans-serif;
-    font-weight: 1000;
-    color: #87929e;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: none
 }
