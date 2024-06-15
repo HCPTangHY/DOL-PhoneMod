@@ -1,3 +1,6 @@
-id,npc,preMsg,requirement,replies
-Bailey_greeting,Bailey,greetingMsg,"Time.hour>=7&&Time.hour<=22","Bailey_greeting.A:Bailey_greetingA"
-Bailey_greetingA,Bailey,Bailey_greeting.A,,
+id,npc,preMsg,requirement,script,hide_msg,replies
+Bailey_init,Bailey,,!V.chatList,,,
+Bailey_greeting,Bailey,greetingMsg,Time.hour>=7&&Time.hour<=22,,,Bailey_greeting.A
+Bailey_greetingA,Bailey,Bailey_greeting.A,,,,
+Bailey_rentlooking_init,Bailey,,V.renttime<=0&&!(V.location=='alex_cottage'||V.location=='home'||location=='temple')&&!V.daily.Bailey,V.daily.Bailey = {};,yes,
+Bailey_rentlooking,Bailey,,V.renttime<=0&&!(V.location=='alex_cottage'||V.location=='home'||location=='temple')&&V.daily.Bailey&&!V.daily.Bailey.rentLooking,V.daily.Bailey.rentLooking=true;,,Bailey_rentlooking.A

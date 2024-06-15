@@ -16,7 +16,7 @@
             "params": [{
                 "passage": "StoryCaption",
                 "findRegex": "(?<=(<<button SOCIAL>>|<<button 社交>>).*\n.*\n.*>>)",
-                "replace": "<<set _t=L.phone>><<button _t>><<overlayReplace \"phone\">><</button>>"
+                "replace": "<<button L('phone')>><<overlayReplace \"phone\">><</button>>"
             }, {
                 "passage": "overlayReplace",
                 "findString": "<<switch _key>>",
@@ -29,7 +29,7 @@
             "params": {
                 "js": [{
                     "from": "sWikifier(\"<<autoTakePillCheck>>\");",
-                    "to": "sWikifier(\"<<autoTakePillCheck>>\");window.check_time_reply();",
+                    "to": "sWikifier(\"<<autoTakePillCheck>>\");window.wecat_main(sWikifier);",
                     "fileName": "effect.js"
                 }]
             }

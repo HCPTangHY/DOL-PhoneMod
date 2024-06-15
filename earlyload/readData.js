@@ -10,6 +10,20 @@
         return csv
     }
 
+    function parse_CSV(csvString) {
+        const rows = csvString.trim().split('\n');
+        const header = rows[0].split(',');
+        const data = rows.slice(1).map(row => {
+            const values = row.split(',');
+            const obj = {};
+            header.forEach((key, index) => {
+                obj[key.trim()] = values[index].trim();
+            });
+            return obj;
+        });
+        return data;
+    }
+
     function parse_YAML(yamlString) {
         const lines = yamlString.split('\n');
         const result = {};
@@ -50,7 +64,8 @@
     for (f of addtionFlies) {
         if (f.search(".csv") != -1) {
             let file = await (mod.zip.zip.file(f).async("string"));
-            let csv = read_csv(file)
+            let csv = []
+            csv = parse_CSV(file);
             PMEvents = PMEvents.concat(csv)
         }
         if (f.search("localization") != -1) {
@@ -66,5 +81,16 @@
         }
     }
     Object.defineProperty(window, "PMEvents", { value: PMEvents })
-    Object.defineProperty(window, 'L', { value: l[navigator.language] });
+    Object.defineProperty(window, 'PhoneModlocalization', { value: l });
+    window.L = function(key) {
+        if (!window.PhoneModlocalization[navigator.language]) {
+            return key
+        } else {
+            if (!window.PhoneModlocalization[navigator.language][key]) {
+                return key
+            } else {
+                return window.PhoneModlocalization[navigator.language][key]
+            }
+        }
+    }
 })();

@@ -4,8 +4,7 @@
     <<setupTabs>>
 	<div id="overlayTabs" class="tab">
 		<<closeButtonMobile>>
-		<<set _t=L.phone>>
-		<<button _t>>
+		<<button L('phone')>>
 			<<replace #customOverlayContent>><<phone>><</replace>>
 		<</button>>
 	</div>
@@ -48,25 +47,47 @@
 <<widget "wecat_content">>
 	<<run $(".phonebg").toggle();>>
 	<div id="wecatcontainer">
-		<div id="wecatheader"><h1><<=L.wecatTitle>></h1></div>
+		<div id="wecatheader"><h1><<=L('wecatTitle')>></h1></div>
 		<div id="wecatlist">
 			<<wecat_msgList>>
 		</div>
 		<div class="wecatfooter">
-			<<set _m = L.wecatMsgTitle;_fl = L.wecatFriListTitle>>
-			<h2><<link _m>><<replace #wecatlist>><<wecat_msgList>><</replace>><</link>></h2>
-			<h2><<link _fl>><<replace #wecatlist>><<wecat_friendlist>><</replace>><</link>></h2>
+			<h2><<link L('wecatMsgTitle')>>
+				<<replace #wecatlist>>
+					<<wecat_msgList>>
+				<</replace>>
+				<<replace #wecatheader>>
+					<h1><<=L('wecatTitle')>></h1>
+				<</replace>>
+			<</link>></h2>
+			<h2><<link L('wecatFriListTitle')>>
+				<<replace #wecatlist>>
+					<<wecat_friendlist>>
+				<</replace>>
+				<<replace #wecatheader>>
+					<h1><<=L('wecatFriListTitle')>></h1>
+				<</replace>>
+			<</link>></h2>
         </div>
 	</div>
 <</widget>>
 
 <<widget "wecat_friendlist">>
-	<<for _i=0; _i < V.NPCName.length; _i++ >>
-		<<print `<<set _name = V.NPCName[_i].nam>>
-		<<link `+V.NPCName[_i].nam+`>>
-			<<replace #wecatcontainer>><<wecat_chat `+V.NPCName[_i].nam+`>><</replace>>
-		<</link>><br>`>>
-	<</for>>
+	<div class="wecatfriendlist-container">
+		<<for _i=0; _i < V.NPCName.length; _i++ >>
+			<<if V.NPCName[_i].init==1>>
+			<div class="wecatfriendlist-item">
+				<<set _name = V.NPCName[_i].nam>>
+				<<print "<img width='85%' src='img/avatar/"+_name+".png'>">>
+				<h2>
+					<<print `<<link `+V.NPCName[_i].nam+`>>
+						<<replace #wecatcontainer>><<wecat_chat `+V.NPCName[_i].nam+`>><</replace>>
+					<</link>>`>>
+				</h2>
+        	</div>
+			<</if>>
+		<</for>>
+    </div>
 <</widget>>
 
 <<widget "wecat_msgList">>
@@ -76,9 +97,11 @@
 	<</if>>
 	<<for _i=0; _i<Object.keys($chatList).length; _i++>>
 		<<set _name=Object.keys($chatList)[_i]>>
+		<<if $chatList[_name].length!=0>>
 		<<link "<<wecat_friendList_item _name>>">>
 			<<replace #wecatcontainer>><<wecat_chat _name>><</replace>>
 		<</link>>
+		<</if>>
 	<</for>>
 <</widget>>
 
@@ -90,7 +113,7 @@
 		</div>
 		<div style=" flex: 1;">
 			<h2>_name</h2>
-			<p><<=L[$chatList[_name][$chatList[_name].length-1].msg]>></p>
+			<p><<=L($chatList[_name][$chatList[_name].length-1].msg)>></p>
 		</div>
 		<div class="wecatlist-item-time"><<=$chatList[_name][$chatList[_name].length-1].sendTime>></div>
 	</div>
@@ -103,47 +126,51 @@
 	<</if>>
 	<div id="wecatchat-contenter">
 		<div class="wecatchat-header">
-            <span class="back-button">&lt;</span>
+            <span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<replace #phonecontents>>
+					<<wecat_content>>
+				<</replace>>
+			<</link>></span>
             <span class="wecatchat-title">_npc</span>
-            <span class="menu-button">⋮</span>
+            <span class="menu-button" style="color: #2a323e;">...</span>
         </div>
 		<div class="wecatchat-content">
 		<<for _i=0; _i<V.chatList[_npc].length; _i++>>
 			<<if V.chatList[_npc][_i].sender=="Me">>
 				<div class="wecatchat-msg-right">
 					<div class="wecatchat-msg-content">
-						<<=L[V.chatList[_npc][_i].msg]>>
+						<<=L(V.chatList[_npc][_i].msg)>>
 					</div>
 				</div>
 			<<else>>
 				<div class="wecatchat-msg">
 					<div class="wecatchat-msg-content">
-						<<=L[V.chatList[_npc][_i].msg]>>
+						<<=L(V.chatList[_npc][_i].msg)>>
 					</div>
 				</div>
 			<</if>>
 		<</for>>
         </div>
 		<div class="wecatchat-footer">
-            <input type="text" placeholder="Type a message...">
-            <button>😊</button>
+			<<if window.PhoneEvents[_npc].includes($chatList[_npc][$chatList[_npc].length-1].msg)>>
+				<<set _e = window.PhoneEventPool[$chatList[_npc][$chatList[_npc].length-1].msg]>>
+				<<if _e.replies!="">>
+					<<set _replies = _e.replies.split(";")>>
+				<</if>>
+			<</if>>
+			<select id='wecatchat-send'>
+				<option value='selfieMsg'><<=L('selfieMsg')>></option>
+				<option value='greetingMsg'><<=L('greetingMsg')>></option>
+				<<if _replies>>
+					<<if _replies.length!=0>>
+						<<for _i=_replies.length-1; _i>=0; _i-->>
+							<<print "<option value='"+_replies[_i].split(":")[0]+"'>"+L(_replies[_i].split(":")[0])+"</option>">>
+						<</for>>
+					<</if>>
+				<</if>>
+			</select>
+            <button onclick="window.send_msg($('#wecatchat-send').val())" style="color: #2a323e;">&gt;</button>
         </div>
 	</div>
-	/* <<set _L=L>>
-	<<if window.PhoneEvents[_npc].includes($chatList[_npc][$chatList[_npc].length-1].msg)>>
-		<<set _e = window.PhoneEventPool[$chatList[_npc][$chatList[_npc].length-1].msg]>>
-		<<if _e.replies!="">>
-			<<set _replies = _e.replies.split(";")>>
-			<<for _i=0; _i<_replies.length; _i++>>
-				<<set _id = _replies[_i].split(":")[0]>>
-				<<print "<<link "+_L[_id]+">><<run window.send_msg('"+_id+"')>><</link>>">><br>
-			<</for>>
-		<</if>>
-	<</if>>
-	<<link _L['greetingMsg']>>
-		<<run window.send_msg("greetingMsg")>>
-	<</link>><br>
-	<<link _L['selfieMsg']>>
-		<<run window.send_msg("selfieMsg")>>
-	<</link>><br> */
 <</widget>>
