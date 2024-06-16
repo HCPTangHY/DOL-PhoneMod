@@ -163,18 +163,17 @@
 		<div class="wecatchat-footer">
 			<<if window.PhoneEvents[_npc].includes($chatList[_npc][$chatList[_npc].length-1].msg)>>
 				<<set _e = window.PhoneEventPool[$chatList[_npc][$chatList[_npc].length-1].msg]>>
-				<<if _e.replies!="">>
-					<<set _replies = _e.replies.split(";")>>
-				<</if>>
+				<<set _replies = _e.replies>>
 			<</if>>
 			<select id='wecatchat-send'>
-				<option value='selfieMsg'><<=L('selfieMsg')>></option>
-				<option value='greetingMsg'><<=L('greetingMsg')>></option>
 				<<if _replies>>
-					<<if _replies.length!=0>>
-						<<for _i=_replies.length-1; _i>=0; _i-->>
-							<<print "<option value='"+_replies[_i].split(":")[0]+"'>"+L(_replies[_i].split(":")[0])+"</option>">>
+					<<if Object.keys(T.replies).length!=0>>
+						<<for _i=Object.keys(T.replies).length-1; _i>=0; _i-->>
+							<<print "<option value='"+Object.keys(T.replies)[_i]+"'>"+L(Object.keys(T.replies)[_i])+"</option>">>
 						<</for>>
+					<<else>>
+						<option value='selfieMsg'><<=L('selfieMsg')>></option>
+						<option value='greetingMsg'><<=L('greetingMsg')>></option>
 					<</if>>
 				<</if>>
 			</select>

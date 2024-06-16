@@ -1,5 +1,6 @@
 {
-    "version": "PRE-EA-0.0.001",
+    "modName": "PhoneMod",
+    "version": "PRE-0.0.2",
     "scriptFileList_earlyload": [
         "earlyload/readData.js"
     ],
@@ -7,7 +8,6 @@
         "injectearly/dataParseScript.js"
     ],
     "additionFile": [
-        "events/BaileyDialogue.csv",
         "localization/zh-CN/system.yml",
         "localization/zh-CN/BaileyDialogue.yml",
         "localization/zh-CN/testEvent2.yml"
