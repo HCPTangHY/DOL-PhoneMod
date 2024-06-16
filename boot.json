@@ -3,6 +3,9 @@
     "scriptFileList_earlyload": [
         "earlyload/readData.js"
     ],
+    "scriptFileList_inject_early": [
+        "injectearly/dataParseScript.js"
+    ],
     "additionFile": [
         "events/BaileyDialogue.csv",
         "localization/zh-CN/system.yml",

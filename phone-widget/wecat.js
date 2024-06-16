@@ -2,9 +2,9 @@ window.send_msg = function(sendKey) {
     V.chatList[T.npc].push({
         sender: "Me",
         msg: sendKey,
-        sendTime: [Time.mouth, Time.mouthDay].join(".") + [Time.hour, Time.minute].join(":")
+        sendTime: [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute]
     });
-    $(".wecatchat-content").append("<div class='wecatchat-msg-right'><div class='wecatchat-msg-content'>" + L[sendKey] + "</div></div>");
+    $(".wecatchat-content").append("<div class='wecatchat-msg-right'><div class='wecatchat-msg-content'>" + L(sendKey) + "</div></div>");
     get_reply(T.npc, sendKey);
 }
 
@@ -47,9 +47,9 @@ function send_event(event) {
         V.chatList[event.npc].push({
             sender: event.npc,
             msg: event.id,
-            sendTime: [Time.mouth, Time.mouthDay].join(".") + [Time.hour, Time.minute].join(":")
+            sendTime: [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute]
         });
-        $(".wecatchat-content").append("<div class='wecatchat-msg-right'><div class='wecatchat-msg-content'>" + L[event.msg] + "</div></div>");
+        $(".wecatchat-content").append("<div class='wecatchat-msg-right'><div class='wecatchat-msg-content'>" + L(event.msg) + "</div></div>");
     }
 }
 

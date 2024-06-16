@@ -92,7 +92,7 @@
 
 <<widget "wecat_msgList">>
 	<<if !$chatList>>
-		<<set $chatList to {Bailey:[{sender:"Bailey",msg:"Bailey_init",sendTime:[Time.year,Time.mouth,Time.mouthDay].join(".")+[Time.hour,Time.minute].join(":")}]}>>
+		<<set $chatList to {Bailey:[{sender:"Bailey",msg:"Bailey_init",sendTime:[Time.year,Time.mouth,Time.mouthDay,Time.hour,Time.minute]}]}>>
 		<<set $replyPool to []>>
 	<</if>>
 	<<for _i=0; _i<Object.keys($chatList).length; _i++>>
@@ -115,7 +115,15 @@
 			<h2>_name</h2>
 			<p><<=L($chatList[_name][$chatList[_name].length-1].msg)>></p>
 		</div>
-		<div class="wecatlist-item-time"><<=$chatList[_name][$chatList[_name].length-1].sendTime>></div>
+		<div class="wecatlist-item-time">
+			<<set _time = $chatList[_name][$chatList[_name].length-1].sendTime>>
+			<<if _time[0]!=Time.year>><<=_time[0]>>/<</if>>
+			<<if _time[1]!=Time.mouth||_time[2]!=Time.mouthDay>>
+				<<=_time[1]>>/<<=_time[2]>>
+			<<else>>
+				<<=_time[3]>>:<<=_time[4].toString().length!=1?_time[4]:"0"+_time[4].toString()>>
+			<</if>>
+		</div>
 	</div>
 <</widget>>
 
