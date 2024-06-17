@@ -1,0 +1,119 @@
+.eMo-container {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box;
+    color: black;
+}
+
+.eMo-header {
+    padding: 10px;
+    background-color: #fff;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.eMo-header h1 {
+    margin: 0;
+    font-size: 20px;
+    color: #494949;
+}
+
+.eMo-product-list {
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.eMo-product-item {
+    background-color: white;
+    color: #464646;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 10px;
+    width: calc(39.25vw - 20px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.eMo-product-image {
+    width: 30%;
+    height: auto;
+    mix-blend-mode: difference;
+    align-items: center;
+    justify-content: center;
+}
+
+.eMo-product p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.eMo-container .button-icon img {
+    filter: invert(100%);
+}
+
+.eMo-container #warmthIndicator {
+    filter: invert(100%);
+}
+
+.eMo-container .clothing-trait {
+    filter: invert(100%);
+}
+
+.eMo-container img[ml-src*="img/misc/icon/clothes/categories"] {
+    filter: invert(100%);
+}
+
+.eMo-container .category-tab {
+    border-color: #464646;
+}
+
+.eMo-container .clothingshop-options-button {
+    right: calc(0.1em + 50px);
+}
+
+.eMo-container .shop-legend-button {
+    right: calc(0.1em + 100px);
+}
+
+.eMo-container .filters-button {
+    right: 0.1em;
+}
+
+.eMo-container .buy-button {
+    display: none;
+}
+
+.eMo-container #buy-send-home .buy-button {
+    display: block;
+}
+
+.eMo-container a[data-passage="Shopping Centre Top"] {
+    display: none;
+}
+
+.eMo-container img[ml-src="img/misc/icon/get_out.png"] {
+    display: none;
+}
+
+.eMo-container a[data-passage="Rebuy Shop"] {
+    display: none;
+}
+
+.eMo-container img[ml-src="img/misc/icon/rebuy_disabled.png"] {
+    display: none;
+}
+
+.eMo-container .page {
+    border-color: black;
+}

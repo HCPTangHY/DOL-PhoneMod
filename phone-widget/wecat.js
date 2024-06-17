@@ -33,7 +33,7 @@ window.check_time_reply = function(sWikifier) {
             send_event(e.event);
             V.replyPool.pop(V.replyPool.indexOf(e))
             if (!e.event.hide_msg) {
-                sWikifier("你有新消息！")
+                sWikifier("你有新消息！<br>")
             }
         }
     }

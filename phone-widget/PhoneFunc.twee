@@ -34,7 +34,10 @@
 				<<wecat_content>>
 			<</replace>>
 		<</phone_app>>
-		<<phone_app 'nyancall'>>
+		<<phone_app 'eMo'>>
+			<<replace #phonecontents>>
+				<<eMo_content>>
+			<</replace>>
 		<</phone_app>>
 		<<phone_app 'nyanbook'>>
 		<</phone_app>>
@@ -44,140 +47,44 @@
 <<widget "galary_content">>
 	Will coming soon!
 <</widget>>
-<<widget "wecat_content">>
-	<<run $(".phonebg").toggle();>>
-	<div id="wecatcontainer">
-		<div id="wecatheader"><h1><<=L('wecatTitle')>></h1></div>
-		<div id="wecatlist">
-			<<wecat_msgList>>
-		</div>
-		<div class="wecatfooter">
-			<h2><<link L('wecatMsgTitle')>>
-				<<replace #wecatlist>>
-					<<wecat_msgList>>
-				<</replace>>
-				<<replace #wecatheader>>
-					<h1><<=L('wecatTitle')>></h1>
-				<</replace>>
-			<</link>></h2>
-			<h2><<link L('wecatFriListTitle')>>
-				<<replace #wecatlist>>
-					<<wecat_friendlist>>
-				<</replace>>
-				<<replace #wecatheader>>
-					<h1><<=L('wecatFriListTitle')>></h1>
-				<</replace>>
-			<</link>></h2>
-        </div>
-	</div>
-<</widget>>
 
-<<widget "wecat_friendlist">>
-	<div class="wecatfriendlist-container">
-		<<for _i=0; _i < V.NPCName.length; _i++ >>
-			<<if V.NPCName[_i].init==1>>
-			<div class="wecatfriendlist-item">
-				<<set _name = V.NPCName[_i].nam>>
-				<<print "<img width='85%' src='img/avatar/"+_name+".png'>">>
-				<h2>
-					<<print `<<link `+V.NPCName[_i].nam+`>>
-						<<replace #wecatcontainer>><<wecat_chat `+V.NPCName[_i].nam+`>><</replace>>
-					<</link>>`>>
-				</h2>
-        	</div>
-			<</if>>
-		<</for>>
-    </div>
-<</widget>>
-
-<<widget "wecat_msgList">>
-	<<if !$chatList>>
-		<<set $chatList to {Bailey:[{sender:"Bailey",msg:"Bailey_init",sendTime:[Time.year,Time.mouth,Time.mouthDay,Time.hour,Time.minute]}]}>>
-		<<set $replyPool to []>>
-	<</if>>
-	<<for _i=0; _i<Object.keys($chatList).length; _i++>>
-		<<set _name=Object.keys($chatList)[_i]>>
-		<<if $chatList[_name].length!=0>>
-		<<link "<<wecat_friendList_item _name>>">>
-			<<replace #wecatcontainer>><<wecat_chat _name>><</replace>>
-		<</link>>
-		<</if>>
-	<</for>>
-<</widget>>
-
-<<widget "wecat_friendList_item">>
-	<<set _name=_args[0]>>
-	<div class="wecatlist-item">
-		<div class="wecatlist-item-avatar">
-			<<print "<img width='85%' style='display: flex;    justify-content: center;align-items: center;' src='img/avatar/"+_name+".png'>">>
-		</div>
-		<div style=" flex: 1;">
-			<h2>_name</h2>
-			<p><<=L($chatList[_name][$chatList[_name].length-1].msg)>></p>
-		</div>
-		<div class="wecatlist-item-time">
-			<<set _time = $chatList[_name][$chatList[_name].length-1].sendTime>>
-			<<if _time[0]!=Time.year>><<=_time[0]>>/<</if>>
-			<<if _time[1]!=Time.mouth||_time[2]!=Time.mouthDay>>
-				<<=_time[1]>>/<<=_time[2]>>
-			<<else>>
-				<<=_time[3]>>:<<=_time[4].toString().length!=1?_time[4]:"0"+_time[4].toString()>>
-			<</if>>
+<<widget "eMo_content">>
+	<div class="eMo-container">
+		<div class="eMo-header"><h1>eMo</h1></div>
+		<div class="eMo-product-list">
+			<<link "<<eMo_product 'clothingShop'>>">>
+				<<replace .eMo-container>>
+					<div id="clothingShop-div" class="main-shop-div">
+					<<clothingShop-main>></div>
+				<</replace>>
+			<</link>>
+			<<link "<<eMo_product 'groceryStore'>>">>
+				
+			<</link>>
+			<<link "<<eMo_product 'pillShop'>>">>
+				
+			<</link>>
+			<<link "<<eMo_product 'adultShop'>>">>
+				
+			<</link>>
 		</div>
 	</div>
 <</widget>>
 
-<<widget "wecat_chat">>
-	<<set _npc=_args[0]>>
-	<<if !$chatList[_npc]>>
-		<<set $chatList[_npc] to []>>
-	<</if>>
-	<div id="wecatchat-contenter">
-		<div class="wecatchat-header">
-            <span class="back-button" style="color: #2a323e;">
-			<<link "<">>
-				<<replace #phonecontents>>
-					<<wecat_content>>
-				<</replace>>
-			<</link>></span>
-            <span class="wecatchat-title">_npc</span>
-            <span class="menu-button" style="color: #2a323e;">...</span>
-        </div>
-		<div class="wecatchat-content">
-		<<for _i=0; _i<V.chatList[_npc].length; _i++>>
-			<<if V.chatList[_npc][_i].sender=="Me">>
-				<div class="wecatchat-msg-right">
-					<div class="wecatchat-msg-content">
-						<<=L(V.chatList[_npc][_i].msg)>>
-					</div>
-				</div>
-			<<else>>
-				<div class="wecatchat-msg">
-					<div class="wecatchat-msg-content">
-						<<=L(V.chatList[_npc][_i].msg)>>
-					</div>
-				</div>
-			<</if>>
-		<</for>>
-        </div>
-		<div class="wecatchat-footer">
-			<<if window.PhoneEvents[_npc].includes($chatList[_npc][$chatList[_npc].length-1].msg)>>
-				<<set _e = window.PhoneEventPool[$chatList[_npc][$chatList[_npc].length-1].msg]>>
-				<<set _replies = _e.replies>>
-			<</if>>
-			<select id='wecatchat-send'>
-				<<if _replies>>
-					<<if Object.keys(T.replies).length!=0>>
-						<<for _i=Object.keys(T.replies).length-1; _i>=0; _i-->>
-							<<print "<option value='"+Object.keys(T.replies)[_i]+"'>"+L(Object.keys(T.replies)[_i])+"</option>">>
-						<</for>>
-					<<else>>
-						<option value='selfieMsg'><<=L('selfieMsg')>></option>
-						<option value='greetingMsg'><<=L('greetingMsg')>></option>
-					<</if>>
-				<</if>>
-			</select>
-            <button onclick="window.send_msg($('#wecatchat-send').val())" style="color: #2a323e;">&gt;</button>
-        </div>
+<<widget "eMo_product">>
+	<<set _img = "">>
+	<<switch _args[0]>>
+		<<case "clothingShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAQAAACROWYpAAAAdElEQVQ4y9WT2w6AIAxDV8P///J8MDEhthOEKfJGwqHtLnB7frYBNgf24Lasba+suoEbV8o4ATco5RK4OnDoBxEcgkkFw6XP1IO23TD0Gsb9RylDUmfsHJIB5a9g1lWaerKy2iKivVbB3oFBOqD2CS3wDzLvUIUXPAKc2MYAAAAASUVORK5CYII=">>
+		<<case "groceryStore">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeAQAAAAATS5MPAAAAAnRSTlMAAHaTzTgAAABRSURBVAjXY2DACwxAhA2IYAMRzP//f2Bg5HASQCY6nICq/v9/wMDQ4aQAJU44JTAweDg5MDDU/z/AwOAA0gwm6v83MDBIMANZKiwNUALMRQEA7r0SmDPVh9AAAAAASUVORK5CYII=">>
+		<<case "pillShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAGdYAABnWARjRyu0AAAGOSURBVEhLzZY/SsVAEMZXGwvvoI2JnSA5goWNCF7i5RDWHiLprQWxsbCzDdYmNnoH6+f71h0dlsyfDaL+IOxkdphvZjawCX/FVlpNuq5bJ1OkbVt3PjOQBFerVXzX6Ps+riUFzALRJXims53WX8cUxvhohBYlsepZYGR1XYdxHJPHhuKtc3aPGgk9qxdVGFWXdAs83QI14OY8xK/zuN4L99Vl9GmcTlfhaXyL9sWtnlvchCgEl4ICNPHZDRLdPzhMnm9eX56TZaOJi2ccRauTz2cDBEtELeyvenr4UUFCF3aIPq6P4lOKKEyCeVIuhLVpmviUiovClIgn9QjBL+1x1FFfTzthGIb0Ng/2KcZTGKEKUxJASUmI73GbF6Khf1wbeJLc9ghIqMJILHXGbV4E92uYHXuZK0LDPGNKxG3A/Ry85745zFFrcAErNke8JN6rs6/EeVLJn7M73ZVfEjnS+MjPVymWI96X1DWBZHSm1CkJ5H6gdQvEDUB/IIAXIQExYvEfSA4vQsIS+weE8AGOqR5/wMrRpgAAAABJRU5ErkJggg==">>
+		<<case "adultShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeBAMAAADJHrORAAAAKlBMVEX/////AAD/TEyBAAAlJSVVAACuAAD///8lJSWBAAD/TEyJiYn/AACuAABLBledAAAAB3RSTlMAAAAAAAAAVWTqWAAAAQVJREFUGNON0bFKBDEQBuBBI8uVvsGhhdgdXCF2FoF9DUE4sEs3gX2AjKzFIqK3B3mAHD7AgS9whPgAwuZdnCSrK5yFU+XjzwxkAvCvQjWdT8/PajIny+Wi+L7LvkLE7I17qo0RzTsRCoCZ845z0SBRy2NmIfj1mGcPfrvmvELUrWHHvndacSc0OzbYGB0pcQNQUfL1EJwByVV8OQTfZdfZF5YtJmsbgpM/ruhhOLB/TtbFZItrKv2UBihZayKVzQ17g1jiMoB2RCXmZZHdt4kG0ivmgJaSjRrNI8j7V74tv/349tEBCFlWWm224XNc99E87SjEl9tfjrFfLSYf9/3q7s+P+wKXlIjSh6yZTwAAAABJRU5ErkJggg==">>
+	<</switch>>
+	<div class="eMo-product-item">
+		<<print "<img class='eMo-product-image' src='"+_img+"'>">>
+		<p><<=L(_args[0])>></p>
 	</div>
 <</widget>>
