@@ -22,3 +22,39 @@
  eMo_clothingShop.viewHand: 查看手饰
  eMo_clothingShop.viewLegwear: 查看袜子
  eMo_clothingShop.viewShoes: 查看鞋类
+ eMo_groceryStore.CosmeticsLipstick: 看看口红
+ eMo_groceryStore.CosmeticsLipstickLink: <<eMo_CosmeticsGenericDepartment "lipstick" "口红" "口红" "lipstick" "" "#FF0000" 1000 "Cosmetics Lipstick" "架子上摆放着一只只五颜六色的口红。" true true 20 `setup.colours.lipstick.map(c=>c.variable)`>>
+ eMo_groceryStore.CosmeticsEyeshadow: 看看眼影
+ eMo_groceryStore.CosmeticsEyeshadowLink: <<eMo_CosmeticsGenericDepartment "eyeshadow" "眼影" "眼影" "eyeshadow" "" "#FF0000" 1500 "Cosmetics Eyeshadow" "眼前摆放着装有闪闪发光的各色眼影的小盒子。" true true 20 `setup.colours.eyeshadow.map(c=>c.variable)`>>
+ eMo_groceryStore.CosmeticsMascara: 看看睫毛膏
+ eMo_groceryStore.CosmeticsMascaraLink: <<eMo_CosmeticsGenericDepartment "mascara" "睫毛膏" "睫毛膏" "mascara" "" "#FF0000" 1500 "Cosmetics Mascara" "你面前摆着一打睫毛膏，不过都是黑色的。" true true 20 `setup.colours.mascara.map(c=>c.variable)`>>
+ eMo_groceryStore.CosmeticsDyes: 看看染发剂
+ eMo_groceryStore.CosmeticsDyesLink: <<eMo_CosmeticsGenericDepartment "hairdye" "染发剂" "染发剂" "hair" "colour-hair" "#FD6064" 4000 "Cosmetics Dyes" "你来到染发剂货架前。" false true 1 `setup.colours.hair.filter(c=>c.dye).map(c=>c.variable)`>>
+ eMo_groceryStore.CosmeticsGenericDepartment1: 你已经拥有了以下颜色的_itemPlural：
+ eMo_groceryStore.CosmeticsGenericDepartment2: 你已经收集齐了_itemPlural的所有可用颜色。你已经没有东西可买了。
+ eMo_groceryStore.CosmeticsGenericDepartment3: 每个_itemSingular的价格为<<printmoney _price>><<if _usesPerBuy > 1>>，可使用_usesPerBuy次<</if>>。
+ eMo_groceryStore.CosmeticsGenericDepartment4: '<<set _usesText = _usesPerBuy > 1 ? " ("+_usesPerBuy+"次可用)" : "">>'
+ eMo_groceryStore.CosmeticsGenericDepartment5: 你买不起这个东西。
+ eMo_groceryStore.buy: 购买
+ eMo_groceryStore.buyhome: 购买并送到家
+ eMo_pillShop.PenisEnhancement: 阴茎增强药：
+ eMo_pillShop.PenisR: 一板（14粒）阴茎缩短剂
+ eMo_pillShop.PenisG: 一板（14粒）阴茎生长剂
+ eMo_pillShop.PenisB: 一板（14粒）阴茎维持剂
+ eMo_pillShop.BreastEnhancement: 丰胸药：
+ eMo_pillShop.BreastR: 一板（14粒）缩胸剂
+ eMo_pillShop.BreastG: 一板（14粒）丰胸剂
+ eMo_pillShop.BreastB: 一板（14粒）胸部维持剂
+ eMo_pillShop.ButtEnhancement: 丰臀药：
+ eMo_pillShop.ButtR: 一板（14粒）瘦臀剂
+ eMo_pillShop.ButtG: 一板（14粒）丰臀剂
+ eMo_pillShop.ButtB: 一板（14粒）臀部维持剂
+ eMo_pillShop.ParasiteP: 寄生虫预防药：
+ eMo_pillShop.AntiParasite: 一管抗寄生虫药膏
+ eMo_pillShop.FamilyP: 计划生育：
+ eMo_pillShop.BreastPump: 挤奶器
+ eMo_pillShop.pregnancyTest: 一盒（2根）验孕棒
+ eMo_pillShop.fertilityPills: 一盒（14颗）排卵促发剂
+ eMo_pillShop.Contraceptive: 避孕药：
+ eMo_pillShop.condoms: 每包3个避孕套
+ eMo_pillShop.contraceptivePills: 一板（14粒）避孕药

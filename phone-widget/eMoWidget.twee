@@ -2,18 +2,30 @@
 
 <<widget "eMo_content">>
 	<div class="eMo-container">
-		<div class="eMo-header"><h1>eMo</h1></div>
+		<div class="eMo-header">
+			<span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<replace #customOverlayContent>><<phone>><</replace>>
+			<</link>>
+			</span>
+			<h1>eMo</h1>
+			<div>...</div></div>
+		<div id="eMo-body">
 		<div class="eMo-product-list">
 			<<link "<<eMo_product 'clothingShop'>>">>
-				<<replace .eMo-container>>
+				<<replace #eMo-body>>
 					<<eMo_clothingShop-main>>
 				<</replace>>
 			<</link>>
 			<<link "<<eMo_product 'groceryStore'>>">>
-                
+				<<replace #eMo-body>>
+                	<<groceryStore_content>>
+				<</replace>>
 			<</link>>
 			<<link "<<eMo_product 'pillShop'>>">>
-				
+				<<replace #eMo-body>>
+                	<<pillShop_content>>
+				<</replace>>
 			<</link>>
 			<<link "<<eMo_product 'adultShop'>>">>
 				<<replace .eMo-container>>
@@ -23,6 +35,25 @@
                 <</replace>>
 			<</link>>
 		</div>
+		</div>
+	</div>
+<</widget>>
+
+<<widget "eMo_product">>
+	<<set _img = "">>
+	<<switch _args[0]>>
+		<<case "clothingShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAQAAACROWYpAAAAdElEQVQ4y9WT2w6AIAxDV8P///J8MDEhthOEKfJGwqHtLnB7frYBNgf24Lasba+suoEbV8o4ATco5RK4OnDoBxEcgkkFw6XP1IO23TD0Gsb9RylDUmfsHJIB5a9g1lWaerKy2iKivVbB3oFBOqD2CS3wDzLvUIUXPAKc2MYAAAAASUVORK5CYII=">>
+		<<case "groceryStore">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeAQAAAAATS5MPAAAAAnRSTlMAAHaTzTgAAABRSURBVAjXY2DACwxAhA2IYAMRzP//f2Bg5HASQCY6nICq/v9/wMDQ4aQAJU44JTAweDg5MDDU/z/AwOAA0gwm6v83MDBIMANZKiwNUALMRQEA7r0SmDPVh9AAAAAASUVORK5CYII=">>
+		<<case "pillShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAGdYAABnWARjRyu0AAAGOSURBVEhLzZY/SsVAEMZXGwvvoI2JnSA5goWNCF7i5RDWHiLprQWxsbCzDdYmNnoH6+f71h0dlsyfDaL+IOxkdphvZjawCX/FVlpNuq5bJ1OkbVt3PjOQBFerVXzX6Ps+riUFzALRJXims53WX8cUxvhohBYlsepZYGR1XYdxHJPHhuKtc3aPGgk9qxdVGFWXdAs83QI14OY8xK/zuN4L99Vl9GmcTlfhaXyL9sWtnlvchCgEl4ICNPHZDRLdPzhMnm9eX56TZaOJi2ccRauTz2cDBEtELeyvenr4UUFCF3aIPq6P4lOKKEyCeVIuhLVpmviUiovClIgn9QjBL+1x1FFfTzthGIb0Ng/2KcZTGKEKUxJASUmI73GbF6Khf1wbeJLc9ghIqMJILHXGbV4E92uYHXuZK0LDPGNKxG3A/Ry85745zFFrcAErNke8JN6rs6/EeVLJn7M73ZVfEjnS+MjPVymWI96X1DWBZHSm1CkJ5H6gdQvEDUB/IIAXIQExYvEfSA4vQsIS+weE8AGOqR5/wMrRpgAAAABJRU5ErkJggg==">>
+		<<case "adultShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeBAMAAADJHrORAAAAKlBMVEX/////AAD/TEyBAAAlJSVVAACuAAD///8lJSWBAAD/TEyJiYn/AACuAABLBledAAAAB3RSTlMAAAAAAAAAVWTqWAAAAQVJREFUGNON0bFKBDEQBuBBI8uVvsGhhdgdXCF2FoF9DUE4sEs3gX2AjKzFIqK3B3mAHD7AgS9whPgAwuZdnCSrK5yFU+XjzwxkAvCvQjWdT8/PajIny+Wi+L7LvkLE7I17qo0RzTsRCoCZ845z0SBRy2NmIfj1mGcPfrvmvELUrWHHvndacSc0OzbYGB0pcQNQUfL1EJwByVV8OQTfZdfZF5YtJmsbgpM/ruhhOLB/TtbFZItrKv2UBihZayKVzQ17g1jiMoB2RCXmZZHdt4kG0ivmgJaSjRrNI8j7V74tv/349tEBCFlWWm224XNc99E87SjEl9tfjrFfLSYf9/3q7s+P+wKXlIjSh6yZTwAAAABJRU5ErkJggg==">>
+	<</switch>>
+	<div class="eMo-product-item">
+		<<print "<img class='eMo-product-image' src='"+_img+"'>">>
+		<p><<=L(_args[0])>></p>
 	</div>
 <</widget>>
 
@@ -86,23 +117,254 @@
 	</div>
 <</widget>>
 
-<<widget "eMo_product">>
-	<<set _img = "">>
-	<<switch _args[0]>>
-		<<case "clothingShop">>
-			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAQAAACROWYpAAAAdElEQVQ4y9WT2w6AIAxDV8P///J8MDEhthOEKfJGwqHtLnB7frYBNgf24Lasba+suoEbV8o4ATco5RK4OnDoBxEcgkkFw6XP1IO23TD0Gsb9RylDUmfsHJIB5a9g1lWaerKy2iKivVbB3oFBOqD2CS3wDzLvUIUXPAKc2MYAAAAASUVORK5CYII=">>
-		<<case "groceryStore">>
-			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeAQAAAAATS5MPAAAAAnRSTlMAAHaTzTgAAABRSURBVAjXY2DACwxAhA2IYAMRzP//f2Bg5HASQCY6nICq/v9/wMDQ4aQAJU44JTAweDg5MDDU/z/AwOAA0gwm6v83MDBIMANZKiwNUALMRQEA7r0SmDPVh9AAAAAASUVORK5CYII=">>
-		<<case "pillShop">>
-			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAGdYAABnWARjRyu0AAAGOSURBVEhLzZY/SsVAEMZXGwvvoI2JnSA5goWNCF7i5RDWHiLprQWxsbCzDdYmNnoH6+f71h0dlsyfDaL+IOxkdphvZjawCX/FVlpNuq5bJ1OkbVt3PjOQBFerVXzX6Ps+riUFzALRJXims53WX8cUxvhohBYlsepZYGR1XYdxHJPHhuKtc3aPGgk9qxdVGFWXdAs83QI14OY8xK/zuN4L99Vl9GmcTlfhaXyL9sWtnlvchCgEl4ICNPHZDRLdPzhMnm9eX56TZaOJi2ccRauTz2cDBEtELeyvenr4UUFCF3aIPq6P4lOKKEyCeVIuhLVpmviUiovClIgn9QjBL+1x1FFfTzthGIb0Ng/2KcZTGKEKUxJASUmI73GbF6Khf1wbeJLc9ghIqMJILHXGbV4E92uYHXuZK0LDPGNKxG3A/Ry85745zFFrcAErNke8JN6rs6/EeVLJn7M73ZVfEjnS+MjPVymWI96X1DWBZHSm1CkJ5H6gdQvEDUB/IIAXIQExYvEfSA4vQsIS+weE8AGOqR5/wMrRpgAAAABJRU5ErkJggg==">>
-		<<case "adultShop">>
-			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeBAMAAADJHrORAAAAKlBMVEX/////AAD/TEyBAAAlJSVVAACuAAD///8lJSWBAAD/TEyJiYn/AACuAABLBledAAAAB3RSTlMAAAAAAAAAVWTqWAAAAQVJREFUGNON0bFKBDEQBuBBI8uVvsGhhdgdXCF2FoF9DUE4sEs3gX2AjKzFIqK3B3mAHD7AgS9whPgAwuZdnCSrK5yFU+XjzwxkAvCvQjWdT8/PajIny+Wi+L7LvkLE7I17qo0RzTsRCoCZ845z0SBRy2NmIfj1mGcPfrvmvELUrWHHvndacSc0OzbYGB0pcQNQUfL1EJwByVV8OQTfZdfZF5YtJmsbgpM/ruhhOLB/TtbFZItrKv2UBihZayKVzQ17g1jiMoB2RCXmZZHdt4kG0ivmgJaSjRrNI8j7V74tv/349tEBCFlWWm224XNc99E87SjEl9tfjrFfLSYf9/3q7s+P+wKXlIjSh6yZTwAAAABJRU5ErkJggg==">>
-	<</switch>>
-	<div class="eMo-product-item">
-		<<print "<img class='eMo-product-image' src='"+_img+"'>">>
-		<p><<=L(_args[0])>></p>
-	</div>
+<<widget "groceryStore_content">>
+	<<replace .eMo-header>>
+		<span class="back-button" style="color: #2a323e;">
+		<<link "<">>
+			<<replace #phonecontents>>
+				<<eMo_content>>
+			<</replace>>
+		<</link>></span><h1>eMo</h1><div>...</div>
+	<</replace>>
+	<<cosmeticsicon>><<link L("eMo_groceryStore.CosmeticsLipstick")>>
+		<<replace .eMo-header>>
+			<span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<replace #eMo-body>>
+					<<groceryStore_content>>
+				<</replace>>
+			<</link>></span>
+		<</replace>>
+		<<replace #eMo-body>>
+			<<print L("eMo_groceryStore.CosmeticsLipstickLink")>>
+		<</replace>>
+	<</link>>
+	<br>
+	<<cosmeticsicon "eyeshadow">><<link L("eMo_groceryStore.CosmeticsEyeshadow")>>
+		<<replace .eMo-header>>
+			<span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<replace #eMo-body>>
+					<<groceryStore_content>>
+				<</replace>>
+			<</link>></span>
+		<</replace>>
+		<<replace #eMo-body>>
+			<<print L("eMo_groceryStore.CosmeticsEyeshadowLink")>>
+		<</replace>>
+	<</link>>
+	<br>
+	<<cosmeticsicon "mascara">><<link L("eMo_groceryStore.CosmeticsMascara")>>
+		<<replace .eMo-header>>
+			<span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<replace #eMo-body>>
+					<<groceryStore_content>>
+				<</replace>>
+			<</link>></span>
+		<</replace>>
+		<<replace #eMo-body>>
+			<<print L("eMo_groceryStore.CosmeticsMascaraLink")>>
+		<</replace>>
+	<</link>>
+	<br>
+	<<cosmeticsicon "dyes">><<link L("eMo_groceryStore.CosmeticsDyes")>>
+		<<replace .eMo-header>>
+			<span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<replace #eMo-body>>
+					<<groceryStore_content>>
+				<</replace>>
+			<</link>></span>
+		<</replace>>
+		<<replace #eMo-body>>
+			<<print L("eMo_groceryStore.CosmeticsDyesLink")>>
+		<</replace>>
+	<</link>>
 <</widget>>
+
+<<widget "pillShop_content">>
+	<<replace .eMo-header>>
+		<span class="back-button" style="color: #2a323e;">
+		<<link "<">>
+			<<replace #phonecontents>>
+				<<eMo_content>>
+			<</replace>>
+		<</link>></span><h1>eMo</h1><div>...</div>
+	<</replace>>
+	<<unset $pharmacyItem>>
+	<<if $player.penisExist>>
+		<<=L("eMo_pillShop.PenisEnhancement")>>
+		<br>
+		<div style="position: relative; display: inline-block;"><<pillicon "penisReduce">></div><<link L("eMo_pillShop.PenisR")>><<set $pharmacyItem to setup.pharmacyItems["penis_reduction"]>><</link>>
+		<br>
+		<div style="position: relative; display: inline-block;"><<pillicon "penisEnlarge">></div><<link L("eMo_pillShop.PenisG")>><<set $pharmacyItem to setup.pharmacyItems["penis_growth"]>><</link>>
+		<br>
+		<div style="position: relative; display: inline-block;"><<pillicon "penisBlock">></div><<link L("eMo_pillShop.PenisB")>><<set $pharmacyItem to setup.pharmacyItems["penis_blocker"]>><</link>>
+		<br><br>
+	<</if>>
+
+	<<=L("eMo_pillShop.BreastEnhancement")>>
+	<br>
+	<div style="position: relative; display: inline-block;"><<pillicon "breastReduce">></div><<link L("eMo_pillShop.BreastR")>>
+		<<set $pharmacyItem to setup.pharmacyItems["breast_reduction"]>>
+		<<replace #eMo-body>><<pillShop_sale>><</replace>>
+	<</link>>
+	<br>
+	<div style="position: relative; display: inline-block;"><<pillicon "breastEnlarge">></div><<link L("eMo_pillShop.BreastG")>><<set $pharmacyItem to setup.pharmacyItems["breast_growth"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br>
+	<div style="position: relative; display: inline-block;"><<pillicon "breastBlock">></div><<link L("eMo_pillShop.BreastB")>><<set $pharmacyItem to setup.pharmacyItems["breast_blocker"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br><br>
+
+	<<=L("eMo_pillShop.ButtEnhancement")>>
+	<br>
+	<div style="position: relative; display: inline-block;"><<pillicon "bottomReduce">></div><<link L("eMo_pillShop.ButtR")>><<set $pharmacyItem to setup.pharmacyItems["bottom_reduction"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br>
+	<div style="position: relative; display: inline-block;"><<pillicon "bottomEnlarge">></div><<link L("eMo_pillShop.ButtG")>><<set $pharmacyItem to setup.pharmacyItems["bottom_growth"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br>
+	<div style="position: relative; display: inline-block;"><<pillicon "bottomBlock">></div><<link L("eMo_pillShop.ButtB")>><<set $pharmacyItem to setup.pharmacyItems["bottom_blocker"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br><br>
+
+	<<=L("eMo_pillShop.ParasiteP")>>
+	<br>
+	<<procedureicon "parasite">><<link L("eMo_pillShop.AntiParasite")>><<set $pharmacyItem to setup.pharmacyItems["Anti-Parasite Cream"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br><br>
+
+	<<=L("eMo_pillShop.FamilyP")>>
+	<br>
+	<<sextoysicon "pump">><<link L("eMo_pillShop.BreastPump")>><<set $pharmacyItem to setup.pharmacyItems["breast_pump"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br>
+	<<pregnancytesticon>><<link L("eMo_pillShop.pregnancyTest")>><<set $pharmacyItem to setup.pharmacyItems["pregnancy_test"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br>
+	<<pillicon "fertility">><<link L("eMo_pillShop.fertilityPills")>><<set $pharmacyItem to setup.pharmacyItems["fertility_pills"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+	<br><br>
+
+	<<=L("eMo_pillShop.Contraceptive")>>
+	<br>
+	<<if $condomLvl gte 1>>
+		<<condomicon>><<link L("eMo_pillShop.condoms")>><<set $pharmacyItem to setup.pharmacyItems["condoms"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+		<br>
+	<</if>>
+	<<pillicon "contraceptive">><<link L("eMo_pillShop.contraceptivePills")>><<set $pharmacyItem to setup.pharmacyItems["contraceptive_pills"]>><<replace #eMo-body>><<pillShop_sale>><</replace>><</link>>
+<</widget>>
+
+<<widget "pillShop_sale">>
+	<<replace .eMo-header>>
+		<span class="back-button" style="color: #2a323e;">
+		<<link "<">>
+			<<replace #eMo-body>>
+				<<pillShop_content>>
+			<</replace>>
+		<</link>></span><h1>eMo</h1><div>...</div>
+	<</replace>>
+	<<print $pharmacyItem.name>>：<<formatmoney $pharmacyItem.price>>_printmoney 
+	<<if $money gte $pharmacyItem.price>>
+	<<switch $pharmacyItem.type>>
+		<<case "Breast Pump">>
+			<<link L("eMo_groceryStore.buy")>><<run sexShopOnBuyClick(11, false)>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+		<<case "condoms">>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<gcondoms 3>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+		<<case "pregnancy test">>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $pregnancyTest += 2>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+		<<case "Anti-Parasite Cream">>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $sexStats.pills.pills[$pharmacyItem.type].owned += 1>><<boughtOnce>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+		<<default>>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $sexStats.pills.pills[$pharmacyItem.type].owned += 14>><<boughtOnce>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+	<</switch>>
+	<<else>>
+		<span class="purple"><<=L("eMo_groceryStore.CosmeticsGenericDepartment5")>></span>
+	<</if>>
+
+<</widget>>
+
+<<widget "eMo_CosmeticsGenericDepartment">>
+	<<set _itemType = _args[0]>>
+	<<set _itemSingular = _args[1]>>
+	<<set _itemPlural = _args[2]>>
+	<<set _cssClassOuter = _args[3]>>
+	<<set _cssClassInner = _args[4]>>
+	<<set _baseColour = _args[5]>>
+	<<set _price = _args[6]>>
+	<<set _passageCurrent = _args[7]>>
+	<<set _textIntro = _args[8]>>
+	<<set _canUseNow = _args[9]>>
+	<<set _isConsumable = _args[10]>>
+	<<set _usesPerBuy = _args[11]>>
+	<<set _availableColours = _args.slice(12)>>
+	<<if _availableColours.length === 1 && Array.isArray(_availableColours)>>
+		<<set _availableColours = _availableColours[0]>>
+	<</if>>
+
+	_textIntro
+	<<if _isConsumable isnot true>>
+		<<if $makeup.owned[_itemType].length > 0>>
+			<br>
+			<<print L("eMo_groceryStore.CosmeticsGenericDepartment1")>>
+			<<for _i, _colour range $makeup.owned[_itemType]>>
+				<span class="grey-shadow"><span @class="_cssClassOuter + '-' + _colour.replace(/ /g, '-')"><span @class="_cssClassInner"><span @style="'color:' + _baseColour + ';'"><<print setup.colourName(_colour)>></span></span></span></span>
+				<<if _i < $makeup.owned[_itemType].length - 1>>, <</if>>
+			<</for>>.
+		<</if>>
+	<<else>>
+		<<set _owned = $makeup.owned[_itemType].filter(x => x.count > 0)>>
+		<<if _owned.length > 0>>
+			<br>
+			<<print L("eMo_groceryStore.CosmeticsGenericDepartment1")>>
+			<<for _i, _item range _owned>>
+				<<if _item.count > 0>>
+					<span class="grey-shadow"><span @class="_cssClassOuter + '-' + _item.colour.replace(/ /g, '-')"><span @class="_cssClassInner"><span @style="'color:' + _baseColour + ';'"><<print setup.colourName(_item.colour)>></span></span></span></span>
+					&nbsp;×&nbsp;_item.count
+					<<if _i < _owned.length - 1>>, <</if>>
+				<</if>>
+			<</for>>.
+		<</if>>
+	<</if>>
+
+	<br><br>
+
+	<<if _isConsumable == false>>
+		<<set _availableColours = _availableColours.filter(x => !$makeup.owned[_itemType].includes(x))>>
+	<</if>>
+	<<if _availableColours.length == 0>>
+		<<print L("eMo_groceryStore.CosmeticsGenericDepartment2")>>
+		<br><br>
+	<<else>>
+		<<print L("eMo_groceryStore.CosmeticsGenericDepartment3")>>
+		<br>
+		<<if $cosmeticsChoice is undefined>>
+			<<set $cosmeticsChoice = _availableColours[0]>>
+		<</if>>
+		<<for _i, _colour range _availableColours>>
+			<label><span class="grey-shadow"><span @class="_cssClassOuter + '-' + _colour.replace(/ /g, '-')"><span @class="_cssClassInner"><span @style="'color:' + _baseColour + ';'"><<print setup.colourName(_colour)>></span></span></span></span>&nbsp;<<print '<<radiobutton "$cosmeticsChoice" "'+_colour+'" ' + ($cosmeticsChoice is _colour ? "checked" : "") + '>>'>></label> |
+		<</for>>
+		<br><br>
+		<<if $money gte _price or Time.dayState is "night">>
+			<<if _isConsumable == true>>
+				<<print L("eMo_groceryStore.CosmeticsGenericDepartment4")>>
+				<<set _t = L("eMo_groceryStore.buy")+_usesText>>
+				<<link _t>>
+					<<addConsumableCosmetics _itemType $cosmeticsChoice _usesPerBuy>>
+					<<set $money -= _price>>
+					<<replace #eMo-body>>
+						<<eMo_CosmeticsGenericDepartment _args[0] _args[1] _args[2] _args[3] _args[4] _args[5] _args[6] _args[7] _args[8] _args[9] _args[10] _args[11] _args[12]>>
+					<</replace>>
+				<</link>>
+			<<else>>
+				<<link L("eMo_groceryStore.buyhome")>>
+					<<set $makeup.owned[_itemType].push($cosmeticsChoice)>>
+					<<set $money -= _price>>
+					<<replace #eMo-body>>
+						<<eMo_CosmeticsGenericDepartment _args[0] _args[1] _args[2] _args[3] _args[4] _args[5] _args[6] _args[7] _args[8] _args[9] _args[10] _args[11] _args[12]>>
+					<</replace>>
+				<</link>>
+			<</if>>
+		<<else>>
+			<span class="purple"><<print L(" eMo_groceryStore.CosmeticsGenericDepartment5")>></span>
+			<br><br>
+		<</if>>
+	<</if>>
+<</widget>>
+
 
 <<widget "adultShop_content">>
 	<<for _i=0;_i<setup.sextoys.length;_i++>>
