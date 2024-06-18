@@ -1,0 +1,132 @@
+:: eMo Widgets [widget]
+
+<<widget "eMo_content">>
+	<div class="eMo-container">
+		<div class="eMo-header"><h1>eMo</h1></div>
+		<div class="eMo-product-list">
+			<<link "<<eMo_product 'clothingShop'>>">>
+				<<replace .eMo-container>>
+					<<eMo_clothingShop-main>>
+				<</replace>>
+			<</link>>
+			<<link "<<eMo_product 'groceryStore'>>">>
+                
+			<</link>>
+			<<link "<<eMo_product 'pillShop'>>">>
+				
+			<</link>>
+			<<link "<<eMo_product 'adultShop'>>">>
+				<<replace .eMo-container>>
+                    <div class="ssm_gridContainer" id="sexShopMenuContainer">
+                    <<run window.sexShopGridInit()>>
+                    </div>
+                <</replace>>
+			<</link>>
+		</div>
+	</div>
+<</widget>>
+
+<<widget "eMo_clothingShop-main">>
+	<div id="clothingShop-div" class="main-shop-div">
+	<<set $shopName = "eMo_clothing">>
+	<<set $shopPage = 0>>
+	<span><<run L('eMo_clothingShop.warmth')>></span>
+	<<warmthscale>>
+	<div id="warmth-description">
+		<<warmth_description>>
+	</div>
+	<br><br>
+	<<clothingcategoryicon "all">>
+	<<link L('eMo_clothingShop.viewAll')>><<replace "#clothingShop-div">><<AllShop>><</replace>><</link>>
+	<br><br>
+	<<if $debug is 1>>
+		<<clothingcategoryicon "overoutfit">>
+		<<link L('eMo_clothingShop.viewOverOutfits')>><<replace "#clothingShop-div">><<OverOutfitShop>><</replace>><</link>>
+		<br><br>
+	<</if>>
+	<<clothingcategoryicon "outfit">>
+	<<link L('eMo_clothingShop.viewOutfits')>><<replace "#clothingShop-div">><<OutfitShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "upper">>
+	<<link L("eMo_clothingShop.viewTop")>><<replace "#clothingShop-div">><<TopShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "lower">>
+	<<link L("eMo_clothingShop.viewBottom")>><<replace "#clothingShop-div">><<BottomShop>><</replace>><</link>>
+	<br><br>
+	<<clothingcategoryicon "underoutfit">>
+	<<link L("eMo_clothingShop.viewUnderOutfit")>><<replace "#clothingShop-div">><<UnderOutfitShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "underupper">>
+	<<link L("eMo_clothingShop.viewUnderTop")>><<replace "#clothingShop-div">><<UnderTopShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "underlower">>
+	<<link L("eMo_clothingShop.viewUnderBottom")>><<replace "#clothingShop-div">><<UnderBottomShop>><</replace>><</link>>
+	<br><br>
+	<<clothingcategoryicon "head">>
+	<<link L("eMo_clothingShop.viewHead")>><<replace "#clothingShop-div">><<HeadShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "face">>
+	<<link L("eMo_clothingShop.viewFace")>><<replace "#clothingShop-div">><<FaceShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "neck">>
+	<<link L("eMo_clothingShop.viewNeck")>><<replace "#clothingShop-div">><<NeckShop>><</replace>><</link>>
+	<br><br>
+	<<clothingcategoryicon "handheld">>
+	<<link L("eMo_clothingShop.viewHandheld")>><<replace "#clothingShop-div">><<HandheldShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "hand">>
+	<<link L("eMo_clothingShop.viewHand")>><<replace "#clothingShop-div">><<HandsShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "legs">>
+	<<link L("eMo_clothingShop.viewLegwear")>><<replace "#clothingShop-div">><<LegsShop>><</replace>><</link>>
+	<br>
+	<<clothingcategoryicon "feet">>
+	<<link L("eMo_clothingShop.viewShoes")>><<replace "#clothingShop-div">><<FeetShop>><</replace>><</link>>
+
+	</div>
+<</widget>>
+
+<<widget "eMo_product">>
+	<<set _img = "">>
+	<<switch _args[0]>>
+		<<case "clothingShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAQAAACROWYpAAAAdElEQVQ4y9WT2w6AIAxDV8P///J8MDEhthOEKfJGwqHtLnB7frYBNgf24Lasba+suoEbV8o4ATco5RK4OnDoBxEcgkkFw6XP1IO23TD0Gsb9RylDUmfsHJIB5a9g1lWaerKy2iKivVbB3oFBOqD2CS3wDzLvUIUXPAKc2MYAAAAASUVORK5CYII=">>
+		<<case "groceryStore">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeAQAAAAATS5MPAAAAAnRSTlMAAHaTzTgAAABRSURBVAjXY2DACwxAhA2IYAMRzP//f2Bg5HASQCY6nICq/v9/wMDQ4aQAJU44JTAweDg5MDDU/z/AwOAA0gwm6v83MDBIMANZKiwNUALMRQEA7r0SmDPVh9AAAAAASUVORK5CYII=">>
+		<<case "pillShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAGdYAABnWARjRyu0AAAGOSURBVEhLzZY/SsVAEMZXGwvvoI2JnSA5goWNCF7i5RDWHiLprQWxsbCzDdYmNnoH6+f71h0dlsyfDaL+IOxkdphvZjawCX/FVlpNuq5bJ1OkbVt3PjOQBFerVXzX6Ps+riUFzALRJXims53WX8cUxvhohBYlsepZYGR1XYdxHJPHhuKtc3aPGgk9qxdVGFWXdAs83QI14OY8xK/zuN4L99Vl9GmcTlfhaXyL9sWtnlvchCgEl4ICNPHZDRLdPzhMnm9eX56TZaOJi2ccRauTz2cDBEtELeyvenr4UUFCF3aIPq6P4lOKKEyCeVIuhLVpmviUiovClIgn9QjBL+1x1FFfTzthGIb0Ng/2KcZTGKEKUxJASUmI73GbF6Khf1wbeJLc9ghIqMJILHXGbV4E92uYHXuZK0LDPGNKxG3A/Ry85745zFFrcAErNke8JN6rs6/EeVLJn7M73ZVfEjnS+MjPVymWI96X1DWBZHSm1CkJ5H6gdQvEDUB/IIAXIQExYvEfSA4vQsIS+weE8AGOqR5/wMrRpgAAAABJRU5ErkJggg==">>
+		<<case "adultShop">>
+			<<set _img = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeBAMAAADJHrORAAAAKlBMVEX/////AAD/TEyBAAAlJSVVAACuAAD///8lJSWBAAD/TEyJiYn/AACuAABLBledAAAAB3RSTlMAAAAAAAAAVWTqWAAAAQVJREFUGNON0bFKBDEQBuBBI8uVvsGhhdgdXCF2FoF9DUE4sEs3gX2AjKzFIqK3B3mAHD7AgS9whPgAwuZdnCSrK5yFU+XjzwxkAvCvQjWdT8/PajIny+Wi+L7LvkLE7I17qo0RzTsRCoCZ845z0SBRy2NmIfj1mGcPfrvmvELUrWHHvndacSc0OzbYGB0pcQNQUfL1EJwByVV8OQTfZdfZF5YtJmsbgpM/ruhhOLB/TtbFZItrKv2UBihZayKVzQ17g1jiMoB2RCXmZZHdt4kG0ivmgJaSjRrNI8j7V74tv/349tEBCFlWWm224XNc99E87SjEl9tfjrFfLSYf9/3q7s+P+wKXlIjSh6yZTwAAAABJRU5ErkJggg==">>
+	<</switch>>
+	<div class="eMo-product-item">
+		<<print "<img class='eMo-product-image' src='"+_img+"'>">>
+		<p><<=L(_args[0])>></p>
+	</div>
+<</widget>>
+
+<<widget "adultShop_content">>
+	<<for _i=0;_i<setup.sextoys.length;_i++>>
+		<<if setup.sextoys[_i].display_condition()>>
+			<<sexShopGridAddItemBox setup.sextoys[_i]>>;
+		<</if>>
+	<</for>>
+<</widget>>
+
+<<widget "sexShopGridAddItemBox">>
+	<<set _item = _args[0]>>
+	<<print `
+	<div class="ssm_item" id="ssm_item_${_item.name_underscore}" onclick="window.sexShopOnItemClick(${_item.index})">
+		<div class="ssm_icon">
+			<img id="ssm_item_icon_${_item.name_underscore}" src="${_item.icon}" class="${_item.colour === 1 ? "clothes-" + _item.colour_options.random() : ""}">
+		</div>
+		<div class="ssm_details">
+			<div class="ssm_item_name">
+				${_item.namecap}
+			</div>
+			<div class="ssm_already_owned">
+				${_item.owned() > 0 ? '<span class="ssm_owned_text">owned</span>' : ""}
+			</div>
+		</div>
+	</div>`>>
+
+<</widget>>

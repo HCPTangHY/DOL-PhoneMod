@@ -24,6 +24,10 @@
                 "passage": "overlayReplace",
                 "findString": "<<switch _key>>",
                 "replace": "<<switch _key>><<case \"phone\">><<replace #customOverlayTitle>><<phone_title>><</replace>><<replace #customOverlayContent>><<phone>><</replace>>"
+            }, {
+                "passage": "Clothing Shop v2 Widgets",
+                "findString": "<<set _shopLocation to _args[0]>>",
+                "replace": "<<set _shopLocation to _args[0].replace('eMo_','')>>"
             }]
         }, {
             "modName": "ReplacePatcher",

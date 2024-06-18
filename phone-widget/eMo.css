@@ -2,9 +2,7 @@
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
-    flex-direction: column;
     height: 100%;
-    flex: 1;
     overflow-y: auto;
     padding: 10px;
     box-sizing: border-box;
@@ -28,7 +26,8 @@
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 
 .eMo-product-item {
@@ -38,7 +37,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin: 10px;
     padding: 10px;
-    width: calc(39.25vw - 20px);
+    width: calc(32vw);
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -111,6 +110,14 @@
 }
 
 .eMo-container img[ml-src="img/misc/icon/rebuy_disabled.png"] {
+    display: none;
+}
+
+.eMo-container a[data-passage="High Street"] {
+    display: none;
+}
+
+.eMo-container img[ml-src="img/misc/icon/high.png"] {
     display: none;
 }
 
