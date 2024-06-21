@@ -85,6 +85,12 @@ function require_check(condition) {
 }
 
 window.wecat_main = function(sWikifier) {
-    window.check_time_reply(sWikifier);
-    window.check_active_event(sWikifier);
-}
+        window.check_time_reply(sWikifier);
+        window.check_active_event(sWikifier);
+    }
+    // let event = {
+    //     id,
+    //     preMsg,
+    //     parentNode,
+    //     options
+    // }

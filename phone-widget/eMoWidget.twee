@@ -124,7 +124,7 @@
 			<<replace #phonecontents>>
 				<<eMo_content>>
 			<</replace>>
-		<</link>></span><h1>eMo</h1><div>...</div>
+		<</link>></span><h1>eMo</h1><div>...</div></div>
 	<</replace>>
 	<<cosmeticsicon>><<link L("eMo_groceryStore.CosmeticsLipstick")>>
 		<<replace .eMo-header>>

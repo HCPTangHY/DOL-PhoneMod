@@ -30,18 +30,16 @@
 
 <<widget "wecat_friendlist">>
 	<div class="wecatfriendlist-container">
-		<<for _i=0; _i < V.NPCName.length; _i++ >>
-			<<if V.NPCName[_i].init==1>>
+		<<for _i=0; _i < Object.keys($chatList).length; _i++ >>
 			<div class="wecatfriendlist-item">
-				<<set _name = V.NPCName[_i].nam>>
+				<<set _name = Object.keys($chatList)[_i]>>
 				<<print "<img width='85%' src='img/avatar/"+_name+".png'>">>
 				<h2>
-					<<print `<<link `+V.NPCName[_i].nam+`>>
-						<<replace #wecatcontainer>><<wecat_chat `+V.NPCName[_i].nam+`>><</replace>>
+					<<print `<<link `+_name+`>>
+						<<replace #wecatcontainer>><<wecat_chat `+_name+`>><</replace>>
 					<</link>>`>>
 				</h2>
         	</div>
-			<</if>>
 		<</for>>
     </div>
 <</widget>>
@@ -54,14 +52,14 @@
 	<<for _i=0; _i<Object.keys($chatList).length; _i++>>
 		<<set _name=Object.keys($chatList)[_i]>>
 		<<if $chatList[_name].length!=0>>
-		<<link "<<wecat_friendList_item _name>>">>
+		<<link "<<wecat_msgList_item _name>>">>
 			<<replace #wecatcontainer>><<wecat_chat _name>><</replace>>
 		<</link>>
 		<</if>>
 	<</for>>
 <</widget>>
 
-<<widget "wecat_friendList_item">>
+<<widget "wecat_msgList_item">>
 	<<set _name=_args[0]>>
 	<div class="wecatlist-item">
 		<div class="wecatlist-item-avatar">

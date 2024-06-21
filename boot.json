@@ -5,7 +5,8 @@
         "earlyload/readData.js"
     ],
     "scriptFileList_inject_early": [
-        "injectearly/dataParseScript.js"
+        "injectearly/dataParseScript.js",
+        "injectearly/eventTree.js"
     ],
     "additionFile": [
         "localization/zh-CN/system.yml",
