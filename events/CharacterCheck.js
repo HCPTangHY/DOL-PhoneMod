@@ -1,6 +1,6 @@
 window.CharacterSchedule = {
     Robin: {
-        get_respones_minute() {
+        getResponseMinute() {
             if (Time.hour >= 8 && Time.hour <= 9) {
                 return 5;
             } else if (Time.hour >= 21) {
@@ -11,7 +11,7 @@ window.CharacterSchedule = {
                 return 1;
             } else if (Time.hour >= 15) {
                 return 5;
-            } else if (!Time.schoolDay && Time.hour >= 9 && time.hour <= 16) {
+            } else if (!Time.schoolDay && Time.hour >= 9 && Time.hour <= 16) {
                 return 10;
             } else {
                 return 5;
@@ -19,7 +19,7 @@ window.CharacterSchedule = {
         }
     },
     Bailey: {
-        get_respones_minute() {
+        getResponseMinute() {
             return 2;
         }
     }

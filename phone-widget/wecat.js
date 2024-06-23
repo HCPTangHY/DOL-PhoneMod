@@ -18,7 +18,7 @@ window.get_reply = function(npc, sendMsg) {
     }
     if (passPool.length == 0) { return }
     let event = passPool[Math.round(Math.random() * (passPool.length - 1))];
-    let replyTime = window.CharacterSchedule[npc].get_respones_minute();
+    let replyTime = window.CharacterSchedule[npc].getResponseMinute();
     replyTime += Time.hour * 60 + Time.minute;
     if (replyTime >= 1440) { replyTime = 1440 - replyTime; }
     V.replyPool.push({ event: event, replyTime: replyTime });
@@ -85,12 +85,6 @@ function require_check(condition) {
 }
 
 window.wecat_main = function(sWikifier) {
-        window.check_time_reply(sWikifier);
-        window.check_active_event(sWikifier);
-    }
-    // let event = {
-    //     id,
-    //     preMsg,
-    //     parentNode,
-    //     options
-    // }
+    window.check_time_reply(sWikifier);
+    window.check_active_event(sWikifier);
+}

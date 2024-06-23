@@ -1,2 +1,9 @@
+# libs
+/degrees-of-lewdity/
+/sugarcube-2-ModLoader/
+
+# envs
+/.vscode/
+/.idea/
+
 *.png
-degrees-of-lewdity
