@@ -44,12 +44,12 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    text-align: center;
 }
 
 .eMo-product-image {
     width: 30%;
     height: auto;
-    mix-blend-mode: difference;
     align-items: center;
     justify-content: center;
 }

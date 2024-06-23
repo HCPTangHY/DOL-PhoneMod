@@ -9,13 +9,12 @@ window.send_msg = function(sendKey) {
 }
 
 window.get_reply = function(npc, sendMsg) {
-    let pool = window.PhoneEvents[npc];
     let passPool = [];
-    for (let id of pool) {
-        if (require_check(window.PhoneEventPool[id].condition) && sendMsg == window.PhoneEventPool[id].preMsg) {
-            passPool.push(window.PhoneEventPool[id]);
+    window.PhoneModEvents.events.get(npc).npcEvents.forEach((value, key) => {
+        if (value.condition() && sendMsg == value.preMsg) {
+            passPool.push(value);
         }
-    }
+    });
     if (passPool.length == 0) { return }
     let event = passPool[Math.round(Math.random() * (passPool.length - 1))];
     let replyTime = window.CharacterSchedule[npc].getResponseMinute();
@@ -23,17 +22,30 @@ window.get_reply = function(npc, sendMsg) {
     if (replyTime >= 1440) { replyTime = 1440 - replyTime; }
     V.replyPool.push({ event: event, replyTime: replyTime });
     V.replyPool = V.replyPool.sort((a, b) => a.replyTime - b.replyTime);
+    console.log("reply push " + event.id)
 }
 
 window.check_time_reply = function(sWikifier) {
     console.log(sWikifier);
     if (!V.replyPool) { return }
-    for (let e of V.replyPool) {
+    for (let i = 0; i < V.replyPool.length; i++) {
+        let e = V.replyPool[i];
         if (Time.hour * 60 + Time.minute >= e.replyTime) {
             send_event(e.event);
-            V.replyPool.pop(V.replyPool.indexOf(e))
             if (!e.event.hide_msg) {
-                sWikifier("你有新消息！<br>")
+                sWikifier("你有新消息！<br>");
+            }
+            console.log(i);
+            V.replyPool.pop(i);
+            let npcPool = window.PhoneModEvents.getNpcAllEvents(e.event.npc);
+            window.PhoneModEvents.changeNpcNowEventKey(e.event.npc, e.event.id);
+            if (npcPool.get(window.PhoneModEvents.getNpcNowEventKey(e.event.npc)).childEvents.size == 0 && e.event.id != "System_npcRest") {
+                window.PhoneModEvents.changeNpcRestFlag(e.event.npc);
+                window.PhoneModEvents.events.get(e.event.npc).npcRestFlag = true;
+                let replyTime = Time.hour * 60 + Time.minute + 10;
+                if (replyTime >= 1440) { replyTime = 1440 - replyTime; }
+                V.replyPool.push({ event: npcPool.get("System_npcRest"), replyTime: replyTime });
+                console.log("reply push System_npcRest");
             }
         }
     }
@@ -41,9 +53,9 @@ window.check_time_reply = function(sWikifier) {
 }
 
 function send_event(event) {
-    eval(event.script);
+    event.action();
     console.log("calling event: " + event.id);
-    if (event.hide_msg != "yes") {
+    if (!event.hide_msg) {
         V.chatList[event.npc].push({
             sender: event.npc,
             msg: event.id,
@@ -54,13 +66,14 @@ function send_event(event) {
 }
 
 window.check_active_event = function(sWikifier) {
-    let pool = []
-    for (let e in window.PhoneEventPool) {
-        e = window.PhoneEventPool[e];
-        if (e.preMsg == "" && require_check(e.condition)) {
-            pool.push(e)
-        }
-    }
+    let pool = [];
+    window.PhoneModEvents.events.forEach((value, key) => {
+        value.npcActiveEventList.forEach((value, key) => {
+            if (value.condition()) {
+                pool.push(e)
+            }
+        })
+    })
     let npcAlreadySend = []
     for (let e of pool) {
         let npcHasReply = false;
@@ -69,7 +82,7 @@ window.check_active_event = function(sWikifier) {
                 npcHasReply = true;
             }
         })
-        if (!npcHasReply && window.PhoneEventPool[V.chatList[e.npc][V.chatList[e.npc].length - 1].msg].replies == {} && !npcAlreadySend.includes(e.npc)) {
+        if (!npcHasReply && nowEventKey != "" && !npcAlreadySend.includes(e.npc)) {
             send_event(e);
             npcAlreadySend.push(e.npc);
             if (!e.hide_msg) {
@@ -80,9 +93,6 @@ window.check_active_event = function(sWikifier) {
 
 }
 
-function require_check(condition) {
-    return eval(condition);
-}
 
 window.wecat_main = function(sWikifier) {
     window.check_time_reply(sWikifier);

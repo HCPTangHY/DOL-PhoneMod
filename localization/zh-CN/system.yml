@@ -3,9 +3,15 @@
  wecatTitle: 猫 信
  wecatMsgTitle: 消息
  wecatFriListTitle: 联系人
+ npcrestNow: ~Ta现在在忙别的事~
  greetingMsg: 哈喽
  selfieMsg: \[自拍]
 
+ eMo_clothingShop: 服装商城
+ eMo_forestShop: 森林商店Online
+ eMo_groceryStore: 百货商店
+ eMo_pillShop: 药店
+ eMo_adultShop: 成人用品
  eMo_clothingShop.warmth: 保暖度：
  eMo_clothingShop.viewAll: 查看全部
  eMo_clothingShop.viewOverOutfits: 查看外衣套装

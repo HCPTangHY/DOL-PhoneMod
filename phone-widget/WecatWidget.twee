@@ -115,23 +115,43 @@
 		<</for>>
         </div>
 		<div class="wecatchat-footer">
-			<<if window.PhoneEvents[_npc].includes($chatList[_npc][$chatList[_npc].length-1].msg)>>
-				<<set _e = window.PhoneEventPool[$chatList[_npc][$chatList[_npc].length-1].msg]>>
-				<<set _replies = _e.replies>>
+			<<set _npcPool = window.PhoneModEvents.getNpcAllEvents(T.npc)>>
+			<<script>>
+				let lastMsg = V.chatList[T.npc][V.chatList[T.npc].length-1];
+				if (lastMsg.sender!="Me"){
+					lastMsg = lastMsg.msg;
+					if (lastMsg!=window.PhoneModEvents.events.get(T.npc).nowEventKey) {
+						window.PhoneModEvents.events.get(T.npc).nowEventKey = lastMsg;
+					}
+				}
+			<</script>>
+			<<if _npcPool.get(window.PhoneModEvents.getNpcNowEventKey(_npc))>>
+				<<set _replies = _npcPool.get(window.PhoneModEvents.getNpcNowEventKey(_npc)).childEvents>>
+				<<set _replies = T.replies.keys().toArray()>>
 			<</if>>
 			<select id='wecatchat-send'>
-				<<if _replies>>
-					<<if Object.keys(T.replies).length!=0>>
-						<<for _i=Object.keys(T.replies).length-1; _i>=0; _i-->>
-							<<print "<option value='"+Object.keys(T.replies)[_i]+"'>"+L(Object.keys(T.replies)[_i])+"</option>">>
-						<</for>>
-					<<else>>
-						<option value='selfieMsg'><<=L('selfieMsg')>></option>
-						<option value='greetingMsg'><<=L('greetingMsg')>></option>
-					<</if>>
+			<<if window.PhoneModEvents.getNpcRestFlag(_npc)>>
+				<option disable value='npcrestNow'><<=L('npcrestNow')>></option>
+			<<else>>
+				<<if _replies&&_replies.length!=0>>
+					<<for _i=_replies.length-1; _i>=0; _i-->>
+						<<print "<option value='"+T.replies[_i]+"'>"+L(T.replies[_i])+"</option>">>
+					<</for>>
+				<<else>>
+					<option value='selfieMsg'><<=L('selfieMsg')>></option>
+					<option value='greetingMsg'><<=L('greetingMsg')>></option>
 				<</if>>
+			<</if>>
 			</select>
-            <button onclick="window.send_msg($('#wecatchat-send').val())" style="color: #2a323e;">&gt;</button>
+			<<if window.PhoneModEvents.getNpcRestFlag(_npc)>>
+            	<button style="color: #2a323e;">&gt;</button>
+			<<else>>
+				<button onclick="window.send_msg($('#wecatchat-send').val())" style="color: #2a323e;">&gt;</button>
+			<</if>>
         </div>
+		<script>
+			var container = document.querySelector('.wecatchat-content');
+			container.scrollTop = container.scrollHeight;
+		</script>
 	</div>
 <</widget>>

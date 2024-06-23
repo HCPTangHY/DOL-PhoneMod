@@ -1,47 +1,59 @@
-const PhoneModEvent = {
+const E = {
+    System_npcRest: {
+        id: "System_npcRest",
+        npc: "Bailey",
+        preMsg: null,
+        condition: (() => {
+            return false
+        }),
+        hide_msg: true,
+        action: (() => {
+            window.PhoneModEvents.changeNpcRestFlag('Bailey');
+        }),
+        childEvents: {}
+    },
     Bailey_init: {
         id: "Bailey_init",
         npc: "Bailey",
-        parentEvent: null,
         preMsg: null,
-        condition: "!V.chatList",
+        condition: (() => {
+            return !V.chatList
+        }),
         hide_msg: false,
-        script: "",
-        replies: []
+        action: (() => {}),
+        childEvents: {}
     },
     Bailey_greeting: {
         id: "Bailey_greeting",
         npc: "Bailey",
-        parentEvent: null,
         preMsg: "greetingMsg",
-        condition: "Time.hour>=7&&Time.hour<=22",
+        condition: (() => { return Time.hour >= 7 && Time.hour <= 22 }),
         hide_msg: false,
-        script: "",
+        action: (() => {}),
         replies: {
             "Bailey_greeting.A": {
-                condition: true,
-                target: "Bailey_greetingA"
+                condition: (() => { return true }),
+                targetEventKey: "Bailey_greetingA",
+                action: (() => {}),
             }
         }
     },
     Bailey_greetingA: {
         id: "Bailey_greetingA",
         npc: "Bailey",
-        parentEvent: "Bailey_greeting",
         preMsg: "Bailey_greeting.A",
-        condition: true,
+        condition: (() => { return true }),
         hide_msg: false,
-        script: "",
+        action: (() => {}),
         replies: {}
     },
     Bailey_rentlooking_init: {
         id: "Bailey_rentlooking_init",
         npc: "Bailey",
-        parentEvent: null,
         preMsg: null,
-        condition: "V.renttime<=0&&!(V.location=='alex_cottage'||V.location=='home'||location=='temple')&&!V.daily.Bailey",
+        condition: (() => { return V.renttime <= 0 && !(V.location == 'alex_cottage' || V.location == 'home' || location == 'temple') && !V.daily.Bailey }),
         hide_msg: true,
-        script: "V.daily.Bailey = {};",
+        action: (() => { V.daily.Bailey = {}; }),
         replies: {}
     },
     Bailey_rentlooking: {
@@ -49,25 +61,17 @@ const PhoneModEvent = {
         npc: "Bailey",
         parentEvent: null,
         preMsg: null,
-        condition: "V.renttime<=0&&!(V.location=='alex_cottage'||V.location=='home'||location=='temple')&&V.daily.Bailey&&!V.daily.Bailey.rentLooking",
+        condition: (() => { return V.renttime <= 0 && !(V.location == 'alex_cottage' || V.location == 'home' || location == 'temple') && V.daily.Bailey && !V.daily.Bailey.rentLooking }),
         hide_msg: true,
-        script: "V.daily.Bailey.rentLooking=true;",
+        action: (() => { V.daily.Bailey.rentLooking = true; }),
         replies: {
             "Bailey_rentlooking.A": {
-                target: null,
-                condition: true
+                targetEventKey: "Bailey_greetingA",
+                condition: (() => { return true }),
+                action: (() => {}),
             }
         }
     }
 }
 
-if (!window.PhoneEventPool) { Object.defineProperty(window, "PhoneEventPool", { value: {} }) };
-if (!window.PhoneEvents) { Object.defineProperty(window, "PhoneEvents", { value: {} }) };
-for (let e in PhoneModEvent) {
-    if (!window.PhoneEvents[PhoneModEvent[e].npc]) {
-        Object.defineProperty(window.PhoneEvents, PhoneModEvent[e].npc, { value: [e] });
-    } else {
-        window.PhoneEvents[PhoneModEvent[e].npc].push(e);
-    }
-    Object.assign(window.PhoneEventPool, PhoneModEvent)
-}
+window.PhoneModEvents.readEvents(E)
