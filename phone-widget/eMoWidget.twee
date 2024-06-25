@@ -13,8 +13,10 @@
 		<div id="eMo-body">
 		<div class="eMo-product-list">
 			<<link "<<eMo_product 'clothingShop'>>">>
+				<<set $shopPage = 0>>
+				<<set $clothingShopSlot to "all">>
 				<<replace #eMo-body>>
-					<<eMo_clothingShop-main>>
+					<<eMo_clothingShopV2>>
 				<</replace>>
 			<</link>>
 			<<link "<<eMo_product 'forestShop'>>">>

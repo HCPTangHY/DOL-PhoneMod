@@ -130,3 +130,128 @@
 .eMo-container .page {
     border-color: black;
 }
+
+.eMoTabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.eMoTabButton {
+    padding: 12px 24px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.3s ease;
+    position: relative;
+    margin: 0 10px;
+}
+
+.eMoTabButton::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #4CAF50;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.eMoTabButton:hover {
+    color: #4CAF50;
+}
+
+.eMoTabButton.active {
+    color: #4CAF50;
+}
+
+.eMoTabButton.active::after {
+    transform: scaleX(1);
+}
+
+
+/* 瀑布流容器 */
+
+.eMoWaterfall {
+    column-count: 5;
+    column-gap: 20px;
+}
+
+
+/* 商品卡片样式 */
+
+.eMoProductCard {
+    break-inside: avoid;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.eMoProductCard .pricetag-placeholder {
+    width: auto;
+    float: right;
+}
+
+.eMoProductCard .clothing-name {
+    display: block;
+    top: 0;
+    left: 10px;
+    margin-top: 4px;
+    margin-right: auto;
+    line-height: 1.1em;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.eMoProductCard .clothing-price {
+    position: relative;
+    left: 10px;
+    top: auto;
+    right: auto;
+    padding: 0 3px 0 10px;
+    border-radius: 0 0 0 0;
+    transform-origin: left;
+    transition: all 0.2s;
+    font-weight: bold;
+    font-size: medium;
+    background: none;
+}
+
+.eMoProductCard .clothing-traits {
+    display: contents;
+    bottom: 10px;
+    left: 165px;
+    width: 150px;
+    height: auto;
+    line-height: 1em;
+}
+
+
+/* 响应式布局 */
+
+@media (max-width: 1024px) {
+    .eMoWaterfall {
+        column-count: 5;
+    }
+}
+
+@media (max-width: 768px) {
+    .eMoWaterfall {
+        column-count: 3;
+    }
+}
+
+@media (max-width: 480px) {
+    .eMoWaterfall {
+        column-count: 2;
+    }
+}

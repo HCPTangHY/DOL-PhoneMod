@@ -1,0 +1,502 @@
+:: eMo Widgets new [widget]
+
+<<widget "eMoTabs">>
+    <div class="eMoTabs">
+        <<link "<button class='eMoTabButton active' id='eMoTabButton1'>板块1</button>">>
+			<<set $shopPage = 0>>
+			<<set $clothingShopSlot to "all">>
+            <<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>>
+            <<run $(".active").removeClass("active");$("#eMoTabButton1").addClass("active");>>
+        <</link>>
+        <<link "<button class='eMoTabButton' id='eMoTabButton2'>板块2</button>">>
+            <<run $(".active").removeClass("active");$("#eMoTabButton2").addClass("active");>>
+        <</link>>
+        <<link "<button class='eMoTabButton' id='eMoTabButton3'>板块3</button>">>
+            <<run $(".active").removeClass("active");$("#eMoTabButton3").addClass("active");>>
+        <</link>>
+        <<link "<button class='eMoTabButton' id='eMoTabButton4'>板块4</button>">>
+            <<run $(".active").removeClass("active");$("#eMoTabButton4").addClass("active");>>
+        <</link>>
+        <<link "<button class='eMoTabButton' id='eMoTabButton5'>板块5</button>">>
+            <<run $(".active").removeClass("active");$("#eMoTabButton5").addClass("active");>>
+        <</link>>
+    </div>
+    <<run $("#eMo-body").on("DOMSubtreeModified",()=>{
+        var element = $("#waterfallbody");
+        if (element) {
+
+            window.eMoloadMoreItems = function () {
+				if (V.shopPage + 1<=T.maxPage) {
+					element.append(wikifier("eMo_clothingPageGenerate",V.shopPage+1));
+                	V.shopPage++;
+				}
+            };
+
+            /* loadMoreItems(); */
+
+            $(".eMo-container")[0].addEventListener('scroll', function() {
+                if ($(".eMo-container")[0].scrollTop + $(".eMo-container")[0].clientHeight >= $(".eMo-container")[0].scrollHeight - 10) {
+                    window.eMoloadMoreItems();
+                }
+            });
+        }
+    });
+    >>
+<</widget>>
+
+<<widget "eMo_clothingShopV2">>
+    <<eMoTabs>>
+    <div class="eMoTabContent">
+        <<set _shopLocation to "eMo_clothing">>
+        <<set _outfits to _args[2] == "outfits" or _args[2] == true>>
+
+        <<if $shopClothingFilter is undefined>>
+            <<shopClothingFilterReset>>
+        <</if>>
+        <<if $shopItemsPerPage is undefined>>
+            <<set $shopItemsPerPage = 12>>
+        <</if>>
+
+        <<if $shopClothingFilter.active>>
+            <span class="green">The filter is currently active!</span>
+            <<link "Reset it">>
+                <<shopClothingFilterReset>>
+                <<updateclotheslist>>
+            <</link>>
+            <br><br>
+        <</if>>
+
+        <!-- Category tabs at the top of the list -->
+        <<set _iconName to clothingSlotToIconName($clothingShopSlot, _outfits)>>
+        <<eMo_shopCategoryTabs _iconName>>
+
+        <!-- Search bar -->
+        <<if !_shopNameFilter>>
+            <<set _shopNameFilter to "">>
+        <</if>>
+        <span class="searchButtons">
+            Search: <<textbox "_shopNameFilterTextbox" _shopNameFilter>>
+            <<button Clear>>
+                <<set _shopNameFilter to "">>
+                <<shopCategoryReplace `clothingSlotToIconName($clothingShopSlot, _outfits)`>>
+            <</button>>
+        </span>
+        <<if _unavailableItems>>
+            <label><<checkbox "$shopClothingFilter.availableOnly" false true autocheck>> Hide unavailable items</label>
+        <<else>>
+            <<set $shopClothingFilter.available to false>>
+        <</if>>
+        <<run $(() => {
+            var shopTimer = null;
+            $('#textbox--shopnamefiltertextbox').on('input change', e => {
+                T.shopNameFilter = shopSearchReplacer(e.target.value);
+                clearTimeout(shopTimer);
+                shopTimer = setTimeout(updateShop, 300);
+            });
+            $('#checkbox-shopclothingfilteravailableonly').on('change', e => {
+                updateShop();
+            });
+            var updateShop = () => {
+                new Wikifier (null, "<<shopCategoryReplace `clothingSlotToIconName($clothingShopSlot, _outfits)`>>");
+                $('#textbox--shopnamefiltertextbox').focus();
+            }
+        })>>
+
+        <div class="eMoWaterfall" id="waterfallbody">
+			<<eMo_getClothingItems>>
+            <<eMo_clothingPageGenerate 0>>
+        </div>
+    </div>
+<</widget>>
+<<widget "eMo_getClothingItems">>
+	<<set _items = setup.clothes[$clothingShopSlot].filter(x => x.shop.includes('clothing') and x.outfitSecondary is undefined
+            and ($clothingShopSlot === 'all'
+                or
+                (_outfits and x.outfitPrimary isnot undefined and Object.keys(x.outfitPrimary).some(secSlot => secSlot.includes("lower")))
+                or
+                (!_outfits and (x.outfitPrimary is undefined or Object.keys(x.outfitPrimary).every(secSlot => !secSlot.includes("lower")))))
+            and (_shopNameFilter is '' or x.name.includes(_shopNameFilter.toLowerCase()))
+            and (!V.shopClothingFilter.availableOnly or !(
+                (setup.clothingLayer.torso.includes(V.clothingShopSlot) and x.reveal < Math.clamp(V.daily.corruptionSlimeClothes, 0, 500) and !x.type.includesAny("school", "event")) or
+                (V.earSlime.forcedDressing and V.earSlime.forcedDressing.days gt 0 and x.gender isnot V.earSlime.forcedDressing.type and x.gender isnot "n" and !x.type.includesAny("event")) or
+                (playerBellySize() >= 12 and x.type.includes("constricting"))
+            ))
+        )>>
+	<<set _items = applyClothingShopFilters(_items)>>
+
+	<<set _maxPage = Math.ceil(filterShopGroup(_items).length / $shopItemsPerPage)>>
+	<!-- Makes sure $shopPage is never showing a blank page -->
+	<<if $shopPage gte _maxPage>>
+		<<set $shopPage to 0>>
+	<</if>>
+<</widget>>
+
+<<widget "eMo_clothingcategoryDiv">>
+	<div @class="'div-link category-tab ' + _active">
+		<<if $options.images is 1>>
+			<<clothingcategoryicon "all">>
+		<<else>>
+			<div class="category-icon-alt">OO</div>
+		<</if>>
+	</div>
+<</widget>>
+
+<<widget "eMo_shopCategoryTabs">>
+    <div id="shopCategories" class="shop-category-tabs no-numberify">
+        <div class="category-group">
+            <<set _active = _args[0] == "all" ? "active" : "">>
+            <div @class="'div-link category-tab ' + _active">
+                <<if $options.images is 1>>
+                    <<clothingcategoryicon "all">>
+                <<else>>
+                    <div class="category-icon-alt">OO</div>
+                <</if>>
+                <<link "">><<set $clothingShopSlot to "all">><<replace #waterfallbody>><<eMo_getClothingItems>>
+            <<eMo_clothingPageGenerate 0>><</replace>><</link>>
+            </div>
+        </div>
+        <<if $debug is 1>>
+            <div class="category-group">
+                <<set _active = _args[0] == "overoutfit" ? "active" : "">>
+                <div @class="'div-link category-tab ' + _active">
+                    <<if $options.images is 1>>
+                        <<clothingcategoryicon "overoutfit">>
+                    <<else>>
+                        <div class="category-icon-alt">OO</div>
+                    <</if>>
+                    <<link "">><<set $clothingShopSlot to "overoutfit">><<replace #waterfallbody>><<eMo_getClothingItems>>
+            <<eMo_clothingPageGenerate 0>><</replace>><</link>>
+                </div>
+            </div>
+        <</if>>
+        <div class="category-group">
+            <<if $shopName isnot "school">>
+                <<set _active = _args[0] == "outfit" ? "active" : "">>
+                <div @class="'div-link category-tab ' + _active">
+                    <<if $options.images is 1>>
+                        <<clothingcategoryicon "outfit">>
+                    <<else>>
+                        <div class="category-icon-alt">O</div>
+                    <</if>>
+                    <<link "">><<set $clothingShopSlot to "outfit">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+                </div>
+            <</if>>
+            <<set _active = _args[0] == "upper" ? "active" : "">>
+            <div @class="'div-link category-tab ' + _active">
+                <<if $options.images is 1>>
+                    <<clothingcategoryicon "upper">>
+                <<else>>
+                    <div class="category-icon-alt">U</div>
+                <</if>>
+                <<link "">><<set $clothingShopSlot to "upper">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+            </div>
+            <<set _active = _args[0] == "lower" ? "active" : "">>
+            <div @class="'div-link category-tab ' + _active">
+                <<if $options.images is 1>>
+                    <<clothingcategoryicon "lower">>
+                <<else>>
+                    <div class="category-icon-alt">L</div>
+                <</if>>
+                <<link "">><<set $shopPage = 0>><<unset $clothes_choice>><<set _shopNameFilter to ''>><<replace "#clothingShop-div">><<BottomShop>><</replace>><</link>>
+            </div>
+        </div>
+        <div class="category-group">
+            <<if $shopName isnot "forest">>
+                <<set _active = _args[0] == "underoutfit" ? "active" : "">>
+                <div @class="'div-link category-tab ' + _active">
+                    <<if $options.images is 1>>
+                        <<clothingcategoryicon "underoutfit">>
+                    <<else>>
+                        <div class="category-icon-alt">UO</div>
+                    <</if>>
+                    <<link "">><<set $clothingShopSlot to "underoutfit">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+                </div>
+            <</if>>
+            <<set _active = _args[0] == "underupper" ? "active" : "">>
+            <div @class="'div-link category-tab ' + _active">
+                <<if $options.images is 1>>
+                    <<clothingcategoryicon "underupper">>
+                <<else>>
+                    <div class="category-icon-alt">UU</div>
+                <</if>>
+                <<link "">><<set $clothingShopSlot to "underupper">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+            </div>
+            <<set _active = _args[0] == "underlower" ? "active" : "">>
+            <div @class="'div-link category-tab ' + _active">
+                <<if $options.images is 1>>
+                    <<clothingcategoryicon "underlower">>
+                <<else>>
+                    <div class="category-icon-alt">UL</div>
+                <</if>>
+                <<link "">><<set $clothingShopSlot to "underlower">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+            </div>
+        </div>
+		<div class="category-group">
+			<<if $shopName isnot "stall">>
+				<<set _active = _args[0] == "head" ? "active" : "">>
+				<div @class="'div-link category-tab ' + _active">
+					<<if $options.images is 1>>
+						<<clothingcategoryicon "head">>
+					<<else>>
+						<div class="category-icon-alt">He</div>
+					<</if>>
+					<<link "">><<set $clothingShopSlot to "head">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+				</div>
+				<<set _active = _args[0] == "face" ? "active" : "">>
+				<div @class="'div-link category-tab ' + _active">
+					<<if $options.images is 1>>
+						<<clothingcategoryicon "face">>
+					<<else>>
+						<div class="category-icon-alt">Fa</div>
+					<</if>>
+					<<link "">><<set $clothingShopSlot to "face">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+				</div>
+				<<if $shopName isnot "school">>
+					<<set _active = _args[0] == "neck" ? "active" : "">>
+					<div @class="'div-link category-tab ' + _active">
+						<<if $options.images is 1>>
+							<<clothingcategoryicon "neck">>
+						<<else>>
+							<div class="category-icon-alt">Ne</div>
+						<</if>>
+						<<link "">><<set $clothingShopSlot to "neck">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+					</div>
+				<</if>>
+				<<set _active = _args[0] == "handheld" ? "active" : "">>
+                <div @class="'div-link category-tab ' + _active">
+                    <<if $options.images is 1>>
+                        <<clothingcategoryicon "handheld">>
+                    <<else>>
+                        <div class="category-icon-alt">Hd</div>
+                    <</if>>
+                    <<link "">><<set $clothingShopSlot to "handheld">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+                </div>
+				<<set _active = _args[0] == "hands" ? "active" : "">>
+				<div @class="'div-link category-tab ' + _active">
+					<<if $options.images is 1>>
+						<<clothingcategoryicon "hand">>
+					<<else>>
+						<div class="category-icon-alt">Ha</div>
+					<</if>>
+					<<link "">><<set $clothingShopSlot to "hand">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+				</div>
+				<<set _active = _args[0] == "legs" ? "active" : "">>
+				<div @class="'div-link category-tab ' + _active">
+					<<if $options.images is 1>>
+						<<clothingcategoryicon "legs">>
+					<<else>>
+						<div class="category-icon-alt">Le</div>
+					<</if>>
+					<<link "">><<set $clothingShopSlot to "legs">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+				</div>
+				<<set _active = _args[0] == "feet" ? "active" : "">>
+				<div @class="'div-link category-tab ' + _active">
+					<<if $options.images is 1>>
+						<<clothingcategoryicon "feet">>
+					<<else>>
+						<div class="category-icon-alt">Fe</div>
+					<</if>>
+					<<link "">><<set $clothingShopSlot to "feet">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
+				</div>
+			<</if>>
+		</div>
+	</div>
+<</widget>>
+
+<<widget "eMo_clothingPageGenerate">>
+    <<set _page = _args[0]>>
+	<<set _itemGroups to []>>
+	<<set _itemsOnPage = filterShopGroup(_items)>>
+	<<set _itemsOnPage = _itemsOnPage.slice(_page * $shopItemsPerPage, (_page + 1) * $shopItemsPerPage)>>
+	<<set _hidden = _page == $shopPage ? "" : " hidden">>
+	<<set _compact = $shopDefaults.compactMode ? "compact" : "">>
+
+	<<set _colCustomPrimary = getCustomColourStyle('primary')>>
+	<<set _colCustomSecondary = getCustomColourStyle('secondary')>>
+
+    <<for _itemTemp range _itemsOnPage>>
+		<<set _item = clone(_itemTemp)>>
+		<<set $_realSlot to ($clothingShopSlot is "all" ? _item.realSlot : $clothingShopSlot)>>
+		<<set _itemData = setup.clothes[$_realSlot][clothesIndex($_realSlot,_item)]>>
+		<<set _locked = $specialClothes[_item.name.replace(/[- ]/g,"")] is "locked">>
+		<<if _locked>><<continue>><</if>>
+		<<set _unlocked = $specialClothes[_item.name.replace(/[- ]/g,"")] is "unlocked">>
+		<div class="eMoProductCard div-link">
+			<!-- Clothing icon -->
+			<div @class="'clothing-icon ' + _compact">
+				<<if $options.images is 1 and _itemData.shopGroup and _items.reduce((prev, curr) => {
+					if (!curr.shopGroup) return prev;
+					if (curr.shopGroup === _itemData.shopGroup) return prev + 1;
+					return prev;
+				},0) gt 1>><div class='fa-icon fa-plus clothing-icon-plus'></div>
+				<</if>>
+				<<if _item.colour_options.length gt 0>>
+					<<if $shopDefaults.colourItems is "random">>
+						<<set _item.colour to _item.colour_options.random()>>
+					<<elseif $shopDefaults.colourItems is "default" and _item.colour_options.includes($shopDefaults.color)>>
+						<<set _item.colour to $shopDefaults.color>>
+						<<if $shopDefaults.color is "custom">>
+							<<set _item.colourCustom = _colCustomPrimary>>
+						<</if>>
+					<</if>>
+				<</if>>
+				<<if _item.accessory_colour_options.length gt 0>>
+					<<if $shopDefaults.colourItems is "random">>
+						<<set _item.accessory_colour to _item.accessory_colour_options.random()>>
+					<<elseif $shopDefaults.colourItems is "default" and _item.accessory_colour_options.includes($shopDefaults.secColor)>>
+						<<set _item.accessory_colour to $shopDefaults.secColor>>
+						<<if $shopDefaults.secColor is "custom">>
+							<<set _item.accessory_colourCustom to _colCustomSecondary>>
+						<</if>>
+					<<else>> /* clothing not available with selected acc colour */
+						<<set _item.accessory_colour to 0>>
+					<</if>>
+				<</if>>
+				<<clothingicon _item $_realSlot>>
+					<!-- Gender icon -->
+				<<if _item.gender isnot "n">>
+					<span class="clothing-gender">
+						<<if $shopDefaults.compactMode>>
+							<<if _item.gender is "m">>
+								<div class="male"></div>
+							<<elseif _item.gender is "f">>
+								<div class="female"></div>
+							<</if>>
+						<<else>>
+							<<if $options.images is 1>>
+								<<if _item.gender is "m">>
+									<img src="img/misc/icon/male.png" class="male">
+								<<elseif _item.gender is "f">>
+									<img src="img/misc/icon/female.png" class="female">
+								<</if>>
+							<<else>>
+								<<if _item.gender is "m">>
+									<span class="male blue bold">♂</span>
+								<<elseif _item.gender is "f">>
+									<span class="female pink bold">♀</span>
+								<</if>>
+							<</if>>
+						<</if>>
+					</span>
+				<</if>>
+			</div>
+
+			<div @class="'clothing-body ' + _compact">
+				<<if !$shopDefaults.compactMode>>
+					<div class="pricetag-placeholder"></div>
+				<</if>>
+				<span class="clothing-name">
+					<<set _csslot = $_realSlot>>
+					<<capture _item _itemData _shopLocation _csslot _outfits>>
+						<<link _itemData.name_cap>>
+							<<set $clothes_choice = clothesIndex(_csslot,_item)>>
+							<<set $clothes_choice_reveal = _item.reveal>>
+							<<set $clothes_choice_integrity = _itemData.integrity_max>>
+							<<if ["over_upper", "upper", "under_upper"].includes(_csslot) and _itemData.outfitPrimary>><<set _outfits to true>><</if>>
+							<<unset $colouraction>>
+							<<unset $accessorycolouraction>>
+							<<run window.scrollTo(0, 0)>>
+							<<updateclotheslist _shopLocation _csslot _outfits>>
+						<</link>>
+					<</capture>>
+					<<set $_count to getOwnedClothingCount(_item.index, $_realSlot)>>
+					<<if $_count isnot 0>>
+						<span class="white">
+							&nbsp;|
+							<<if !_compact>>
+								Owned:
+							<</if>>
+							$_count
+						</span>
+					<</if>>
+					<<if _unlocked>>
+						<span class="gold">&nbsp;| Unlocked</span>
+					<</if>>
+				</span>
+
+				<!-- Price tag -->
+				<span class="clothing-price"><<printmoney `getClothingCost(_item, $_realSlot)` true>></span>
+				<!-- Integrity, Reveal and Warmth indicators -->
+				<<if !$shopDefaults.compactMode>>
+					<<set $_intInf = getIntegrityInfo(_item.integrity_max)>>
+					<<set $_tooltip to `<span class="black">Clothing durability:</span> <i class="${$_intInf[1]} normal">${_item.integrity_max}</i>`>>
+					<div class="clothing-integrity" @tooltip="$_tooltip">
+						<<if $options.images is 1>>
+							<img class="clothing-stats-icon" src="img/misc/icon/integrity.png">
+						<<else>>
+							<span class="clothing-stats-text">I.</span>
+						<</if>>
+
+						<<for _i = 0; _i lt 7; _i++>>
+							<span @class="'stats-ball ' + (_i < $_intInf[0] ? 'bg-' + $_intInf[1] : '')">&nbsp;</span>
+						<</for>>
+					</div>
+					<<set $_revInf = getRevealInfo(_item.reveal)>>
+					<<set $_tooltip to `<span class="black">Clothing exposure:</span> <i class="${$_revInf[1]} normal">${_item.reveal}</i>`>>
+					<div class="clothing-reveal" @tooltip="$_tooltip">
+						<<if $options.images is 1>>
+							<img class="clothing-stats-icon" src="img/misc/icon/reveal.png">
+						<<else>>
+							<span class="clothing-stats-text">R.</span>
+						<</if>>
+
+						<<for _i = 0; _i lt 7; _i++>>
+							<span @class="'stats-ball ' + (_i < $_revInf[0] ? 'bg-' + $_revInf[1] : '')">&nbsp;</span>
+						<</for>>
+					</div>
+					<<set $_warmth = getTrueWarmth(_item)>>
+					<<set $_warInf = getWarmthInfo($_warmth * 0.5)>>
+					<<set $_tooltip to `<span class="black">Clothing warmth:</span> <i class="orange normal">${$_warmth}</i>`>>
+					<div class="clothing-warmth" @tooltip="$_tooltip">
+						<<if $options.images is 1>>
+							<img class="clothing-stats-icon" src="img/misc/icon/warmth.png">
+						<<else>>
+							<span class="clothing-stats-text">W.</span>
+						<</if>>
+						<<for _i = 0; _i lt 7; _i++>>
+							<span class="stats-ball" @style="(_i < $_warmth * 0.5 ? $_warInf : '')">&nbsp;</span>
+						<</for>>
+					</div>
+				<</if>>
+				<<if !$shopDefaults.noTraits>>
+					<!-- Trait icons -->
+					<div class="clothing-traits">
+						<<for _i, _trait range _item.type>>
+							<<clothingtrait _trait>>
+						<</for>>
+					</div>
+				<</if>>
+				<<if $shopDefaults.compactMode>>
+					<div class="pricetag-placeholder"></div>
+				<</if>>
+			</div>
+		</div>
+	<</for>>
+
+<</widget>>
