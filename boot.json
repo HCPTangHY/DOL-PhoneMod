@@ -1,6 +1,6 @@
 {
     "modName": "PhoneMod",
-    "version": "PRE-0.0.2",
+    "version": "PRE-0.0.3",
     "scriptFileList_earlyload": [
         "earlyload/readData.js"
     ],
