@@ -153,8 +153,9 @@
                 <<else>>
                     <div class="category-icon-alt">OO</div>
                 <</if>>
-                <<link "">><<set $clothingShopSlot to "all">><<replace #waterfallbody>><<eMo_getClothingItems>>
-            <<eMo_clothingPageGenerate 0>><</replace>><</link>>
+                <<link "">><<set $clothingShopSlot to "all">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
             </div>
         </div>
         <<if $debug is 1>>
@@ -166,8 +167,9 @@
                     <<else>>
                         <div class="category-icon-alt">OO</div>
                     <</if>>
-                    <<link "">><<set $clothingShopSlot to "overoutfit">><<replace #waterfallbody>><<eMo_getClothingItems>>
-            <<eMo_clothingPageGenerate 0>><</replace>><</link>>
+                    <<link "">><<set $clothingShopSlot to "over_upper">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
                 </div>
             </div>
         <</if>>
@@ -180,7 +182,7 @@
                     <<else>>
                         <div class="category-icon-alt">O</div>
                     <</if>>
-                    <<link "">><<set $clothingShopSlot to "outfit">><<replace #eMo-body>>
+                    <<link "">><<set $clothingShopSlot to "upper">><<replace #eMo-body>>
                 <<eMo_clothingShopV2>>
             <</replace>><</link>>
                 </div>
@@ -203,7 +205,9 @@
                 <<else>>
                     <div class="category-icon-alt">L</div>
                 <</if>>
-                <<link "">><<set $shopPage = 0>><<unset $clothes_choice>><<set _shopNameFilter to ''>><<replace "#clothingShop-div">><<BottomShop>><</replace>><</link>>
+                <<link "">><<set $clothingShopSlot to "lower">><<replace #eMo-body>>
+                <<eMo_clothingShopV2>>
+            <</replace>><</link>>
             </div>
         </div>
         <div class="category-group">
@@ -215,7 +219,7 @@
                     <<else>>
                         <div class="category-icon-alt">UO</div>
                     <</if>>
-                    <<link "">><<set $clothingShopSlot to "underoutfit">><<replace #eMo-body>>
+                    <<link "">><<set $clothingShopSlot to "under_upper">><<replace #eMo-body>>
                 <<eMo_clothingShopV2>>
             <</replace>><</link>>
                 </div>
@@ -227,7 +231,7 @@
                 <<else>>
                     <div class="category-icon-alt">UU</div>
                 <</if>>
-                <<link "">><<set $clothingShopSlot to "underupper">><<replace #eMo-body>>
+                <<link "">><<set $clothingShopSlot to "under_upper">><<replace #eMo-body>>
                 <<eMo_clothingShopV2>>
             <</replace>><</link>>
             </div>
@@ -238,7 +242,7 @@
                 <<else>>
                     <div class="category-icon-alt">UL</div>
                 <</if>>
-                <<link "">><<set $clothingShopSlot to "underlower">><<replace #eMo-body>>
+                <<link "">><<set $clothingShopSlot to "under_lower">><<replace #eMo-body>>
                 <<eMo_clothingShopV2>>
             <</replace>><</link>>
             </div>
@@ -298,7 +302,7 @@
 					<<else>>
 						<div class="category-icon-alt">Ha</div>
 					<</if>>
-					<<link "">><<set $clothingShopSlot to "hand">><<replace #eMo-body>>
+					<<link "">><<set $clothingShopSlot to "hands">><<replace #eMo-body>>
                 <<eMo_clothingShopV2>>
             <</replace>><</link>>
 				</div>
@@ -327,6 +331,7 @@
 			<</if>>
 		</div>
 	</div>
+	<<run linkifyDivs('#shopCategories')>>
 <</widget>>
 
 <<widget "eMo_clothingPageGenerate">>
