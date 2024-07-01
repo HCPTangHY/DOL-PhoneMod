@@ -29,6 +29,10 @@
                 "passage": "Clothing Shop v2 Widgets",
                 "findString": "<<set _shopLocation to _args[0]>>",
                 "replace": "<<set _shopLocation to _args[0].replace('eMo_','')>>"
+            }, {
+                "passage": "Clothing Shop v2 Widgets",
+                "findString": "<<replace \".clothing-details\">><<shopDetailsv2>><</replace>>",
+                "replace": "<<replace \".clothing-details\">><<if _shopLocation.includes('eMo_')>><<eMo_shopClothingDetails>><<else>><<shopDetailsv2>><</if>><</replace>>"
             }]
         }, {
             "modName": "ReplacePatcher",

@@ -5,9 +5,7 @@
         <<link "<button class='eMoTabButton active' id='eMoTabButton1'>板块1</button>">>
 			<<set $shopPage = 0>>
 			<<set $clothingShopSlot to "all">>
-            <<replace #eMo-body>>
-                <<eMo_clothingShopV2>>
-            <</replace>>
+            <<run window.eMo_clothingShop()>>
             <<run $(".active").removeClass("active");$("#eMoTabButton1").addClass("active");>>
         <</link>>
         <<link "<button class='eMoTabButton' id='eMoTabButton2'>板块2</button>">>
@@ -23,32 +21,14 @@
             <<run $(".active").removeClass("active");$("#eMoTabButton5").addClass("active");>>
         <</link>>
     </div>
-    <<run $("#eMo-body").on("DOMSubtreeModified",()=>{
-        var element = $("#waterfallbody");
-        if (element) {
-
-            window.eMoloadMoreItems = function () {
-				if (V.shopPage + 1<=T.maxPage) {
-					element.append(wikifier("eMo_clothingPageGenerate",V.shopPage+1));
-                	V.shopPage++;
-				}
-            };
-
-            /* loadMoreItems(); */
-
-            $(".eMo-container")[0].addEventListener('scroll', function() {
-                if ($(".eMo-container")[0].scrollTop + $(".eMo-container")[0].clientHeight >= $(".eMo-container")[0].scrollHeight - 10) {
-                    window.eMoloadMoreItems();
-                }
-            });
-        }
-    });
-    >>
 <</widget>>
 
 <<widget "eMo_clothingShopV2">>
-    <<eMoTabs>>
-    <div class="eMoTabContent">
+
+<</widget>>
+
+<<widget "eMo_clothingShopV2_countPage">>
+	<div class="eMoTabContent">
         <<set _shopLocation to "eMo_clothing">>
         <<set _outfits to _args[2] == "outfits" or _args[2] == true>>
 
@@ -103,13 +83,9 @@
                 $('#textbox--shopnamefiltertextbox').focus();
             }
         })>>
-
-        <div class="eMoWaterfall" id="waterfallbody">
-			<<eMo_getClothingItems>>
-            <<eMo_clothingPageGenerate 0>>
-        </div>
-    </div>
+	</div>
 <</widget>>
+
 <<widget "eMo_getClothingItems">>
 	<<set _items = setup.clothes[$clothingShopSlot].filter(x => x.shop.includes('clothing') and x.outfitSecondary is undefined
             and ($clothingShopSlot === 'all'
@@ -131,16 +107,6 @@
 	<<if $shopPage gte _maxPage>>
 		<<set $shopPage to 0>>
 	<</if>>
-<</widget>>
-
-<<widget "eMo_clothingcategoryDiv">>
-	<div @class="'div-link category-tab ' + _active">
-		<<if $options.images is 1>>
-			<<clothingcategoryicon "all">>
-		<<else>>
-			<div class="category-icon-alt">OO</div>
-		<</if>>
-	</div>
 <</widget>>
 
 <<widget "eMo_shopCategoryTabs">>
@@ -427,7 +393,11 @@
 							<<unset $colouraction>>
 							<<unset $accessorycolouraction>>
 							<<run window.scrollTo(0, 0)>>
-							<<updateclotheslist _shopLocation _csslot _outfits>>
+							<<replace #eMo-body>>
+								<div class="clothing-details">
+									<<eMo_shopClothingDetails>>
+								</div>
+							<</replace>>
 						<</link>>
 					<</capture>>
 					<<set $_count to getOwnedClothingCount(_item.index, $_realSlot)>>
@@ -501,7 +471,133 @@
 					<div class="pricetag-placeholder"></div>
 				<</if>>
 			</div>
+
 		</div>
 	<</for>>
+	<<run linkifyDivs('#waterfallbody')>>
+<</widget>>
 
+<<widget "eMo_shopClothingDetails">>
+	<<set _tempItem = _item>>
+	<<unset _mannequinGenderOverride>>
+	<<if $clothes_choice and setup.clothes[$clothingShopSlot][$clothes_choice] is undefined>>
+		<<unset $clothes_choice>>
+	<<elseif $clothes_choice>>
+		<<set _temp_choice = clone(setup.clothes[$clothingShopSlot][$clothes_choice])>>
+		<<set _realSlot = ($clothingShopSlot is "all" ? _item.realSlot : $clothingShopSlot)>>
+		<<set _realIndex = _temp_choice.index>>
+
+		<main class="eMoMain">
+			<div class="eMoImageGallery">
+			<div class="clothing-colours-div">
+				<<set _hiddenMannequin = $options.images is 1 ? "" : "hidden">>
+				<!-- Item preview -->
+				<div id="mannequin" @class="'mannequin ' + _hiddenMannequin">
+					<<mannequin>>
+					<<set _item = _tempItem>>
+					<<if _temp_choice.shopGroup and Array.isArray(_items) and _items.reduce((prev, curr) => {
+						if (!curr.shopGroup) return prev;
+						if (curr.shopGroup === _temp_choice.shopGroup) return prev + 1;
+						return prev;
+					},0) gt 1>>
+						<div class="eMo-mannequin-buttons-right no-numberify">
+							<<set _groupIndex to _itemGroups[_temp_choice.shopGroup].indexOf($clothes_choice)>>
+							<<link "<span class='fa-icon fa-left-arrow'></span>">>
+								<<set _groupIndex to _itemGroups[_temp_choice.shopGroup].indexOf($clothes_choice)>>
+								<<set _groupIndexMax to _itemGroups[_temp_choice.shopGroup].length - 1>>
+								<<set $clothes_choice to _groupIndex gt 0 ? _itemGroups[_temp_choice.shopGroup][_groupIndex - 1] : _itemGroups[_temp_choice.shopGroup][_groupIndexMax]>>
+								<<replace ".clothing-details">><<eMo_shopClothingDetails>><</replace>>
+								<<run linkifyDivs('.clothing-details')>>
+							<</link>>
+							_groupIndex
+							<<link "<span class='fa-icon fa-right-arrow'></span>">>
+								<<set _groupIndex to _itemGroups[_temp_choice.shopGroup].indexOf($clothes_choice)>>
+								<<set $clothes_choice to _itemGroups[_temp_choice.shopGroup][_groupIndex + 1] ? _itemGroups[_temp_choice.shopGroup][_groupIndex + 1] : _itemGroups[_temp_choice.shopGroup][0]>>
+								<<replace ".clothing-details">><<eMo_shopClothingDetails>><</replace>>
+								<<run linkifyDivs('.clothing-details')>>
+							<</link>>
+						</div>
+					<</if>>
+				</div>
+
+				<<set _translate = $options.images is 1 ? "translate-colours-container" : "">>
+				<div @class="'colours-container ' + _translate">
+					<div @class="'mannequin-placeholder ' + _hiddenMannequin"></div>
+					<<if _temp_choice.colour_options.length gt 1>>
+						<<run _temp_choice.colour_options.pushUnique("random")>>
+						There's a range of colours to choose from:
+						<br>
+						<<printShopColourOptions>>
+					<</if>>
+					<<if _temp_choice.accessory_colour_options.length isnot 0>>
+						<<run _temp_choice.accessory_colour_options.pushUnique("random")>>
+						<br>
+						Secondary colour:
+						<br>
+						<<printShopColourOptions "secondary">>
+					<</if>>
+				</div>
+			</div>
+			</div>
+			<<run linkifyDivs(".colour-options-div")>>
+			<<run attachCustomColourHooks($clothingShopSlot)>>
+
+			<!-- Check if current clothing can be unequiped -->
+			<<unset _cursedPrevent>>
+			<<set _preventSlots to []>>
+			<<if $worn[_realSlot].cursed is 1>>
+				<<set _cursedPrevent to true>>
+				<<run _preventSlots.push(_realSlot)>>
+			<</if>>
+			<<set _wardrobeSlots to [_realSlot]>>
+			<<if _temp_choice.outfitPrimary isnot undefined>>
+				<<for _slot, _name range _temp_choice.outfitPrimary>>
+					<<run _wardrobeSlots.push(_slot)>>
+					<<if $worn[_slot].cursed is 1>>
+						<<set _cursedPrevent to true>>
+						<<run _preventSlots.push(_slot)>>
+					<</if>>
+				<</for>>
+			<</if>>
+
+			<section class="eMoProductInfo">
+				<h1 class="eMoProductTitle"><<print _temp_choice.name>></h1>
+				<p class="eMoProductDescription">
+					<<if _temp_choice.plural is 1>>
+						<<integrity $clothes_choice_integrity>>
+					<<else>>
+						A <<integrity $clothes_choice_integrity>>
+					<</if>>
+					and <<reveal $clothes_choice_reveal>> <<print _temp_choice.name>>.
+					<<if _temp_choice.gender is "m">>
+						<span class="lblue">For boys.</span>
+					<<elseif _temp_choice.gender is "f">>
+						<span class="pink">For girls.</span>
+					<</if>>
+					<<print _temp_choice.description>> Costs <<printmoney `getClothingCost(_temp_choice,$clothingShopSlot)`>>.
+					<br>
+					<<set _truewarmth = getTrueWarmth(_temp_choice)>>
+					<<print setup.WeatherDescriptions.clothingWarmth(_truewarmth)>>
+				</p>
+				<div class="eMoProductFeatures">
+					<<shoptraits>>
+				</div>
+
+				<div class="eMoWarmthMeter">
+					<<warmthscale>>
+					<div id="warmth-description">
+						<<warmth_description>>
+					</div>
+				</div>
+
+				<div class="eMoClosetSpace">
+					<<shopBuyItemStatus _wardrobeSlots>>
+				</div>
+			</section>
+		</main>
+
+		<footer class="eMoFooter">
+			<button class="eMoAddToCartButton">加入购物车</button>
+		</footer>
+	<</if>>
 <</widget>>

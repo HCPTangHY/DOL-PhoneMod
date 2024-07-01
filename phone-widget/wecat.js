@@ -27,7 +27,6 @@ window.get_reply = function(npc, sendMsg) {
 
 window.check_time_reply = function(sWikifier) {
     console.log(sWikifier);
-    if (!V.replyPool) { return }
     for (let i = 0; i < V.replyPool.length; i++) {
         let e = V.replyPool[i];
         if (Time.hour * 60 + Time.minute >= e.replyTime) {
@@ -70,7 +69,7 @@ window.check_active_event = function(sWikifier) {
     window.PhoneModEvents.events.forEach((value, key) => {
         value.npcActiveEventList.forEach((value, key) => {
             if (value.condition()) {
-                pool.push(e)
+                pool.push(value)
             }
         })
     })
@@ -93,8 +92,29 @@ window.check_active_event = function(sWikifier) {
 
 }
 
+window.wecatInit = function() {
+    V.replyPool = [];
+    class WecatChatListItem {
+        name;
+        type;
+        msgList;
+    }
+    class WecatMsg {
+        msg;
+        sender;
+        sendTime;
+    }
+    V.chatList = [new WecatChatListItem()];
+    V.chatList[0].name = "Bailey";
+    V.chatList[0].type = "NNPC";
+    V.chatList[0].msgList = [new WecatMsg()];
+    V.chatList[0].msgList[0].msg = "Bailey_init";
+    V.chatList[0].msgList[0].sender = "Bailey";
+    V.chatList[0].msgList[0].sendTime = [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute];
+}
 
 window.wecat_main = function(sWikifier) {
+    if (!V.replyPool) { window.wecatInit(); }
     window.check_time_reply(sWikifier);
     window.check_active_event(sWikifier);
 }

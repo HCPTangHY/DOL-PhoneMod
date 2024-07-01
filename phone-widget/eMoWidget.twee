@@ -15,9 +15,7 @@
 			<<link "<<eMo_product 'clothingShop'>>">>
 				<<set $shopPage = 0>>
 				<<set $clothingShopSlot to "all">>
-				<<replace #eMo-body>>
-					<<eMo_clothingShopV2>>
-				<</replace>>
+				<<run window.eMo_clothingShop()>>
 			<</link>>
 			<<link "<<eMo_product 'forestShop'>>">>
 				<<replace #eMo-body>>
