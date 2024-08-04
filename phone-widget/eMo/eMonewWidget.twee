@@ -2,34 +2,48 @@
 
 <<widget "eMoTabs">>
     <div class="eMoTabs">
-        <<link "<button class='eMoTabButton active' id='eMoTabButton1'>板块1</button>">>
+        <<link "<<eMoTabButton 'eMo_clothingShop' 1>>">>
 			<<set $shopPage = 0>>
 			<<set $clothingShopSlot to "all">>
-            <<run window.eMo_clothingShop()>>
+            <<run window.eMo_clothingShop('eMo_clothing')>>
             <<run $(".active").removeClass("active");$("#eMoTabButton1").addClass("active");>>
         <</link>>
-        <<link "<button class='eMoTabButton' id='eMoTabButton2'>板块2</button>">>
+        <<link "<<eMoTabButton 'eMo_forestShop' 2>>">>
+			<<set $shopPage = 0>>
+			<<set $clothingShopSlot to "all">>
+            <<run window.eMo_clothingShop('eMo_forest')>>
             <<run $(".active").removeClass("active");$("#eMoTabButton2").addClass("active");>>
         <</link>>
-        <<link "<button class='eMoTabButton' id='eMoTabButton3'>板块3</button>">>
+        <<link "<<eMoTabButton 'eMo_groceryStore' 3>>">>
+			<<eMoTabs>>
+			<<replace #eMo-body>>
+				<<groceryStore_content>>
+			<</replace>>
             <<run $(".active").removeClass("active");$("#eMoTabButton3").addClass("active");>>
         <</link>>
-        <<link "<button class='eMoTabButton' id='eMoTabButton4'>板块4</button>">>
+        <<link "<<eMoTabButton 'eMo_pillShop' 4>>">>
+			<<eMoTabs>>
+			<<replace #eMo-body>>
+				<<pillShop_content>>
+			<</replace>>
             <<run $(".active").removeClass("active");$("#eMoTabButton4").addClass("active");>>
         <</link>>
-        <<link "<button class='eMoTabButton' id='eMoTabButton5'>板块5</button>">>
+        <<link "<<eMoTabButton 'eMo_adultShop' 5>>">>
             <<run $(".active").removeClass("active");$("#eMoTabButton5").addClass("active");>>
         <</link>>
     </div>
+	<<if _args[0]>>
+		<<run $("#eMoTabButton"+_args[0]).addClass("active");>>
+	<</if>>
 <</widget>>
 
-<<widget "eMo_clothingShopV2">>
-
+<<widget "eMoTabButton">>
+	<<print "<button class='eMoTabButton' id='eMoTabButton"+_args[1]+"'><<=L(_args[0])>></button>">>
 <</widget>>
 
 <<widget "eMo_clothingShopV2_countPage">>
 	<div class="eMoTabContent">
-        <<set _shopLocation to "eMo_clothing">>
+        <<set _shopLocation to _args[0]>>
         <<set _outfits to _args[2] == "outfits" or _args[2] == true>>
 
         <<if $shopClothingFilter is undefined>>
@@ -87,7 +101,7 @@
 <</widget>>
 
 <<widget "eMo_getClothingItems">>
-	<<set _items = setup.clothes[$clothingShopSlot].filter(x => x.shop.includes('clothing') and x.outfitSecondary is undefined
+	<<set _items = setup.clothes[$clothingShopSlot].filter(x => x.shop.includes(T.shopLocation.replace("eMo_","")) and x.outfitSecondary is undefined
             and ($clothingShopSlot === 'all'
                 or
                 (_outfits and x.outfitPrimary isnot undefined and Object.keys(x.outfitPrimary).some(secSlot => secSlot.includes("lower")))
@@ -385,7 +399,8 @@
 				<span class="clothing-name">
 					<<set _csslot = $_realSlot>>
 					<<capture _item _itemData _shopLocation _csslot _outfits>>
-						<<link _itemData.name_cap>>
+						<<=L("eMo_clothingShop.waterfallCellClothName")>>
+						<<link _name_cap>>
 							<<set $clothes_choice = clothesIndex(_csslot,_item)>>
 							<<set $clothes_choice_reveal = _item.reveal>>
 							<<set $clothes_choice_integrity = _itemData.integrity_max>>
@@ -525,14 +540,14 @@
 					<div @class="'mannequin-placeholder ' + _hiddenMannequin"></div>
 					<<if _temp_choice.colour_options.length gt 1>>
 						<<run _temp_choice.colour_options.pushUnique("random")>>
-						There's a range of colours to choose from:
+						<<=L('eMo_clothingShop.colorChoice')>>
 						<br>
 						<<printShopColourOptions>>
 					<</if>>
 					<<if _temp_choice.accessory_colour_options.length isnot 0>>
 						<<run _temp_choice.accessory_colour_options.pushUnique("random")>>
 						<br>
-						Secondary colour:
+						<<=L('eMo_clothingShop.colorChoice2')>>
 						<br>
 						<<printShopColourOptions "secondary">>
 					<</if>>
@@ -561,20 +576,20 @@
 			<</if>>
 
 			<section class="eMoProductInfo">
-				<h1 class="eMoProductTitle"><<print _temp_choice.name>></h1>
+				<h1 class="eMoProductTitle"><<=L('eMo_clothingShop.clothName')>></h1>
 				<p class="eMoProductDescription">
 					<<if _temp_choice.plural is 1>>
 						<<integrity $clothes_choice_integrity>>
 					<<else>>
-						A <<integrity $clothes_choice_integrity>>
+						<<=L('eMo_clothingShop.clothDesc1')>><<integrity $clothes_choice_integrity>>
 					<</if>>
-					and <<reveal $clothes_choice_reveal>> <<print _temp_choice.name>>.
+						<<=L('eMo_clothingShop.clothDesc2')>>
 					<<if _temp_choice.gender is "m">>
-						<span class="lblue">For boys.</span>
+						<<=L('eMo_clothingShop.clothDesc3')>>
 					<<elseif _temp_choice.gender is "f">>
-						<span class="pink">For girls.</span>
+						<<=L('eMo_clothingShop.clothDesc4')>>
 					<</if>>
-					<<print _temp_choice.description>> Costs <<printmoney `getClothingCost(_temp_choice,$clothingShopSlot)`>>.
+					<<=L('eMo_clothingShop.clothDesc5')>>
 					<br>
 					<<set _truewarmth = getTrueWarmth(_temp_choice)>>
 					<<print setup.WeatherDescriptions.clothingWarmth(_truewarmth)>>
@@ -595,9 +610,50 @@
 				</div>
 			</section>
 		</main>
+		<<replace .eMo-header>>
+			<span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<set $shopPage = 0>>
+				<<set $clothingShopSlot to "all">>
+				<<run window.eMo_clothingShop(_shopLocation)>>
+				<<replace .eMo-header>>
+					<span class="back-button" style="color: #2a323e;">
+					<<link "<">>
+						<<replace #phonecontents>>
+							<<eMo_content>>
+						<</replace>>
+					<</link>></span><h1>eMo</h1><div>...</div>
+				<</replace>>
+			<</link>></span><h1><<=L('eMo_clothingShop.clothName')>></h1><div>...</div>
+		<</replace>>
 
+		<<if $buyMultiple is undefined>>
+			<<set $buyMultiple = 1>>
+		<</if>>
+		<<set _clothingCost = getClothingCost(_temp_choice, $clothingShopSlot)>>
+		<<set _canAfford = ($money >= _clothingCost * $buyMultiple and _spaceLeft >= $buyMultiple) ? "" : "disabled">>
 		<footer class="eMoFooter">
-			<button class="eMoAddToCartButton">加入购物车</button>
+			<<link "<<eMoBuyButton>>">>
+				<<run console.log(1)>>
+				<<if $money >= _clothingCost * $buyMultiple and _spaceLeft >= $buyMultiple>>
+					<<set $money -= _clothingCost * $buyMultiple>>
+					<<if $shopDefaults.disableReturn is false>>
+						<<unset $clothes_choice>>
+					<</if>>
+					<<updatesidebarmoney>>
+					<<run updateMoment()>>
+					<<run $(".eMoMain").prepend(L("eMo_clothingShop.buyMsg")+"<br>")>>
+					<<if _choice_index isnot undefined>>
+						<<set $colouraction2 = $colouraction>>
+						<<set $accessorycolouraction2 = $accessorycolouraction>>
+					<</if>>
+					<<generalSend $wardrobes.shopReturn _slot _realIndex $colouraction2 $accessorycolouraction2>>
+				<</if>>
+			<</link>>
 		</footer>
 	<</if>>
+<</widget>>
+
+<<widget "eMoBuyButton">>
+	<button @class="'eMoBuyButton ' + _canAfford"><<=L('eMo_shopBuy')+' × ' + $buyMultiple>><span>(<span class="gold"><<printmoney `_clothingCost * $buyMultiple`>></span>)</span></button>
 <</widget>>

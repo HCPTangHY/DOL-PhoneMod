@@ -12,6 +12,17 @@
  eMo_groceryStore: 百货商店
  eMo_pillShop: 药店
  eMo_adultShop: 成人用品
+ eMo_shopBuy: 购买
+ eMo_clothingShop.waterfallCellClothName: <<set _name_cap = _itemData.cn_name_cap>>
+ eMo_clothingShop.clothName: <<print _temp_choice.cn_name_cap>>
+ eMo_clothingShop.colorChoice: 有一系列颜色可供选择：
+ eMo_clothingShop.colorChoice2: 次要颜色：
+ eMo_clothingShop.clothDesc1: 一件
+ eMo_clothingShop.clothDesc2: 且<<reveal $clothes_choice_reveal>>的<<print _temp_choice.cn_name_cap>>。
+ eMo_clothingShop.clothDesc3: <span class="lblue">适用于男性。</span>
+ eMo_clothingShop.clothDesc4: <span class="pink">适用于女性。</span>
+ eMo_clothingShop.clothDesc5: <<print _temp_choice.description>>价格为<<printmoney `getClothingCost(_temp_choice,$clothingShopSlot)`>>。
+ eMo_clothingShop.buyMsg: 你购买了这件衣服
  eMo_clothingShop.warmth: 保暖度：
  eMo_clothingShop.viewAll: 查看全部
  eMo_clothingShop.viewOverOutfits: 查看外衣套装

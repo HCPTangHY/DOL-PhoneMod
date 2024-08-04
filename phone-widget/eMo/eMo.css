@@ -87,7 +87,7 @@
 }
 
 .eMoTabButton {
-    padding: 12px 24px;
+    padding: 12px;
     border: none;
     background-color: transparent;
     cursor: pointer;
@@ -275,7 +275,7 @@
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.eMoAddToCartButton {
+.eMoBuyButton {
     width: 100%;
     padding: 15px;
     background-color: #4CAF50;
@@ -286,7 +286,7 @@
     cursor: pointer;
 }
 
-.eMoAddToCartButton:hover {
+.eMoBuyButton:hover {
     background-color: #45a049;
 }
 

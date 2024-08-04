@@ -1,5 +1,5 @@
 window.send_msg = function(sendKey) {
-    V.chatList[T.npc].push({
+    V.chatList[T.npc].msgList.push({
         sender: "Me",
         msg: sendKey,
         sendTime: [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute]
@@ -55,7 +55,12 @@ function send_event(event) {
     event.action();
     console.log("calling event: " + event.id);
     if (!event.hide_msg) {
-        V.chatList[event.npc].push({
+        if (!V.chatList[event.npc]) {
+            V.chatList[event.npc] = { name: event.npc, type: "NNPC", msgList: [], avaterKey: "椒盐实验体_0" };
+            let sendtime = [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute];
+            V.chatList[event.npc].msgList = [{ msg: "", sender: event.npc, sendTime: sendtime }];
+        }
+        V.chatList[event.npc].msgList.push({
             sender: event.npc,
             msg: event.id,
             sendTime: [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute]
@@ -81,7 +86,7 @@ window.check_active_event = function(sWikifier) {
                 npcHasReply = true;
             }
         })
-        if (!npcHasReply && nowEventKey != "" && !npcAlreadySend.includes(e.npc)) {
+        if (!npcHasReply && window.PhoneModEvents.getNpcNowEventKey(e.npc) == "" && !npcAlreadySend.includes(e.npc)) {
             send_event(e);
             npcAlreadySend.push(e.npc);
             if (!e.hide_msg) {
@@ -95,22 +100,23 @@ window.check_active_event = function(sWikifier) {
 window.wecatInit = function() {
     V.replyPool = [];
     class WecatChatListItem {
-        name;
-        type;
-        msgList;
+        constructor(name, type, avaterKey) {
+            this.name = name;
+            this.type = type;
+            this.msgList = [];
+            this.avaterKey = avaterKey;
+        }
     }
     class WecatMsg {
-        msg;
-        sender;
-        sendTime;
+        constructor(msg, sender, sendTime) {
+            this.msg = msg;
+            this.sender = sender;
+            this.sendTime = sendTime;
+        }
     }
-    V.chatList = [new WecatChatListItem()];
-    V.chatList[0].name = "Bailey";
-    V.chatList[0].type = "NNPC";
-    V.chatList[0].msgList = [new WecatMsg()];
-    V.chatList[0].msgList[0].msg = "Bailey_init";
-    V.chatList[0].msgList[0].sender = "Bailey";
-    V.chatList[0].msgList[0].sendTime = [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute];
+    V.chatList = { "Bailey": new WecatChatListItem("Bailey", "NNPC", "椒盐实验体_0") };
+    let sendtime = [Time.year, Time.mouth, Time.mouthDay, Time.hour, Time.minute];
+    V.chatList["Bailey"].msgList = [new WecatMsg("Bailey_init", "Bailey", sendtime)];
 }
 
 window.wecat_main = function(sWikifier) {

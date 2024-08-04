@@ -9,37 +9,54 @@
 			<</link>>
 			</span>
 			<h1>eMo</h1>
-			<div>...</div></div>
-		<div id="eMo-body">
-		<div class="eMo-product-list">
-			<<link "<<eMo_product 'clothingShop'>>">>
-				<<set $shopPage = 0>>
-				<<set $clothingShopSlot to "all">>
-				<<run window.eMo_clothingShop()>>
-			<</link>>
-			<<link "<<eMo_product 'forestShop'>>">>
-				<<replace #eMo-body>>
-					<<eMo_forestShop-main>>
-				<</replace>>
-			<</link>>
-			<<link "<<eMo_product 'groceryStore'>>">>
-				<<replace #eMo-body>>
-                	<<groceryStore_content>>
-				<</replace>>
-			<</link>>
-			<<link "<<eMo_product 'pillShop'>>">>
-				<<replace #eMo-body>>
-                	<<pillShop_content>>
-				<</replace>>
-			<</link>>
-			<<link "<<eMo_product 'adultShop'>>">>
-				<<replace .eMo-container>>
-                    <div class="ssm_gridContainer" id="sexShopMenuContainer">
-                    <<run window.sexShopGridInit()>>
-                    </div>
-                <</replace>>
-			<</link>>
+			<div>...</div>
 		</div>
+		<div id="eMo-body">
+			<div class="eMo-product-list">
+				<<link "<<eMo_product 'clothingShop'>>">>
+					<<set $shopPage = 0>>
+					<<set $clothingShopSlot to "all">>
+					<<run window.eMo_clothingShop('eMo_clothing')>>
+					<<replace .eMo-header>>
+						<span class="back-button" style="color: #2a323e;">
+						<<link "<">>
+							<<replace #phonecontents>>
+								<<eMo_content>>
+							<</replace>>
+						<</link>></span><h1>eMo</h1><div>...</div>
+					<</replace>>
+				<</link>>
+				<<link "<<eMo_product 'forestShop'>>">>
+					<<set $shopPage = 0>>
+					<<set $clothingShopSlot to "all">>
+					<<run window.eMo_clothingShop('eMo_forest')>>
+					<<replace .eMo-header>>
+						<span class="back-button" style="color: #2a323e;">
+						<<link "<">>
+							<<replace #phonecontents>>
+								<<eMo_content>>
+							<</replace>>
+						<</link>></span><h1>eMo</h1><div>...</div>
+					<</replace>>
+				<</link>>
+				<<link "<<eMo_product 'groceryStore'>>">>
+					<<replace #eMo-body>>
+						<<groceryStore_content>>
+					<</replace>>
+				<</link>>
+				<<link "<<eMo_product 'pillShop'>>">>
+					<<replace #eMo-body>>
+						<<pillShop_content>>
+					<</replace>>
+				<</link>>
+				<<link "<<eMo_product 'adultShop'>>">>
+					/* <<replace .eMo-container>>
+						<div class="ssm_gridContainer" id="sexShopMenuContainer">
+						<<run window.sexShopGridInit()>>
+						</div>
+					<</replace>> */
+				<</link>>
+			</div>
 		</div>
 	</div>
 <</widget>>
@@ -69,66 +86,6 @@
 	</div>
 <</widget>>
 
-<<widget "eMo_clothingShop-main">>
-	<div id="clothingShop-div" class="main-shop-div">
-	<<set $shopName = "eMo_clothing">>
-	<<set $shopPage = 0>>
-	<span><<run L('eMo_clothingShop.warmth')>></span>
-	<<warmthscale>>
-	<div id="warmth-description">
-		<<warmth_description>>
-	</div>
-	<br><br>
-	<<clothingcategoryicon "all">>
-	<<link L('eMo_clothingShop.viewAll')>><<replace "#clothingShop-div">><<AllShop>><</replace>><</link>>
-	<br><br>
-	<<if $debug is 1>>
-		<<clothingcategoryicon "overoutfit">>
-		<<link L('eMo_clothingShop.viewOverOutfits')>><<replace "#clothingShop-div">><<OverOutfitShop>><</replace>><</link>>
-		<br><br>
-	<</if>>
-	<<clothingcategoryicon "outfit">>
-	<<link L('eMo_clothingShop.viewOutfits')>><<replace "#clothingShop-div">><<OutfitShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "upper">>
-	<<link L("eMo_clothingShop.viewTop")>><<replace "#clothingShop-div">><<TopShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "lower">>
-	<<link L("eMo_clothingShop.viewBottom")>><<replace "#clothingShop-div">><<BottomShop>><</replace>><</link>>
-	<br><br>
-	<<clothingcategoryicon "underoutfit">>
-	<<link L("eMo_clothingShop.viewUnderOutfit")>><<replace "#clothingShop-div">><<UnderOutfitShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "underupper">>
-	<<link L("eMo_clothingShop.viewUnderTop")>><<replace "#clothingShop-div">><<UnderTopShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "underlower">>
-	<<link L("eMo_clothingShop.viewUnderBottom")>><<replace "#clothingShop-div">><<UnderBottomShop>><</replace>><</link>>
-	<br><br>
-	<<clothingcategoryicon "head">>
-	<<link L("eMo_clothingShop.viewHead")>><<replace "#clothingShop-div">><<HeadShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "face">>
-	<<link L("eMo_clothingShop.viewFace")>><<replace "#clothingShop-div">><<FaceShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "neck">>
-	<<link L("eMo_clothingShop.viewNeck")>><<replace "#clothingShop-div">><<NeckShop>><</replace>><</link>>
-	<br><br>
-	<<clothingcategoryicon "handheld">>
-	<<link L("eMo_clothingShop.viewHandheld")>><<replace "#clothingShop-div">><<HandheldShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "hand">>
-	<<link L("eMo_clothingShop.viewHand")>><<replace "#clothingShop-div">><<HandsShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "legs">>
-	<<link L("eMo_clothingShop.viewLegwear")>><<replace "#clothingShop-div">><<LegsShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "feet">>
-	<<link L("eMo_clothingShop.viewShoes")>><<replace "#clothingShop-div">><<FeetShop>><</replace>><</link>>
-
-	</div>
-<</widget>>
-
 <<widget "groceryStore_content">>
 	<<replace .eMo-header>>
 		<span class="back-button" style="color: #2a323e;">
@@ -136,8 +93,9 @@
 			<<replace #phonecontents>>
 				<<eMo_content>>
 			<</replace>>
-		<</link>></span><h1>eMo</h1><div>...</div></div>
+		<</link>></span><h1>eMo</h1><div>...</div>
 	<</replace>>
+	<<eMoTabs>>
 	<<cosmeticsicon>><<link L("eMo_groceryStore.CosmeticsLipstick")>>
 		<<replace .eMo-header>>
 			<span class="back-button" style="color: #2a323e;">
@@ -195,69 +153,6 @@
 	<</link>>
 <</widget>>
 
-<<widget "eMo_forestShop-main">>
-	<div id="clothingShop-div" class="main-shop-div">
-	<<unset $shopListStartCount>>
-	<<unset $clothes_choice>>
-	<<set $shopPage = 0>>
-	<<set $shopName = "eMo_forest">>
-
-	<span><<=L("eMo_clothingShop.warmth")>></span>
-	<<warmthscale>>
-	<div id="warmth-description">
-		<<warmth_description>>
-	</div>
-	<br><br>
-
-	<<clothingcategoryicon "all">>
-	<<link L('eMo_clothingShop.viewAll')>><<replace "#clothingShop-div">><<AllShop>><</replace>><</link>>
-	<br><br>
-	<<if $debug is 1>>
-		<<clothingcategoryicon "overoutfit">>
-		<<link L('eMo_clothingShop.viewOverOutfits')>><<replace "#clothingShop-div">><<OverOutfitShop>><</replace>><</link>>
-		<br><br>
-	<</if>>
-	<<clothingcategoryicon "outfit">>
-	<<link L('eMo_clothingShop.viewOutfits')>><<replace "#clothingShop-div">><<OutfitShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "upper">>
-	<<link L("eMo_clothingShop.viewTop")>><<replace "#clothingShop-div">><<TopShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "lower">>
-	<<link L("eMo_clothingShop.viewBottom")>><<replace "#clothingShop-div">><<BottomShop>><</replace>><</link>>
-	<br><br>
-	<<clothingcategoryicon "underoutfit">>
-	<<link L("eMo_clothingShop.viewUnderOutfit")>><<replace "#clothingShop-div">><<UnderOutfitShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "underupper">>
-	<<link L("eMo_clothingShop.viewUnderTop")>><<replace "#clothingShop-div">><<UnderTopShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "underlower">>
-	<<link L("eMo_clothingShop.viewUnderBottom")>><<replace "#clothingShop-div">><<UnderBottomShop>><</replace>><</link>>
-	<br><br>
-	<<clothingcategoryicon "head">>
-	<<link L("eMo_clothingShop.viewHead")>><<replace "#clothingShop-div">><<HeadShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "face">>
-	<<link L("eMo_clothingShop.viewFace")>><<replace "#clothingShop-div">><<FaceShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "neck">>
-	<<link L("eMo_clothingShop.viewNeck")>><<replace "#clothingShop-div">><<NeckShop>><</replace>><</link>>
-	<br><br>
-	<<clothingcategoryicon "handheld">>
-	<<link L("eMo_clothingShop.viewHandheld")>><<replace "#clothingShop-div">><<HandheldShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "hand">>
-	<<link L("eMo_clothingShop.viewHand")>><<replace "#clothingShop-div">><<HandsShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "legs">>
-	<<link L("eMo_clothingShop.viewLegwear")>><<replace "#clothingShop-div">><<LegsShop>><</replace>><</link>>
-	<br>
-	<<clothingcategoryicon "feet">>
-	<<link L("eMo_clothingShop.viewShoes")>><<replace "#clothingShop-div">><<FeetShop>><</replace>><</link>>
-	</div>
-<</widget>>
-
 <<widget "pillShop_content">>
 	<<replace .eMo-header>>
 		<span class="back-button" style="color: #2a323e;">
@@ -267,6 +162,7 @@
 			<</replace>>
 		<</link>></span><h1>eMo</h1><div>...</div>
 	<</replace>>
+	<<eMoTabs>>
 	<<unset $pharmacyItem>>
 	<<if $player.penisExist>>
 		<<=L("eMo_pillShop.PenisEnhancement")>>
@@ -332,19 +228,20 @@
 			<</replace>>
 		<</link>></span><h1>eMo</h1><div>...</div>
 	<</replace>>
+	<<eMoTabs>>
 	<<print $pharmacyItem.name>>：<<formatmoney $pharmacyItem.price>>_printmoney 
 	<<if $money gte $pharmacyItem.price>>
 	<<switch $pharmacyItem.type>>
 		<<case "Breast Pump">>
-			<<link L("eMo_groceryStore.buy")>><<run sexShopOnBuyClick(11, false)>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+			<<link L("eMo_groceryStore.buy")>><<run sexShopOnBuyClick(11, false)>><<replace #eMo-body>><<pillShop_content>><</replace>><<updatesidebarmoney>><</link>>
 		<<case "condoms">>
-			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<gcondoms 3>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<gcondoms 3>><<replace #eMo-body>><<pillShop_content>><</replace>><<updatesidebarmoney>><</link>>
 		<<case "pregnancy test">>
-			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $pregnancyTest += 2>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $pregnancyTest += 2>><<replace #eMo-body>><<pillShop_content>><</replace>><<updatesidebarmoney>><</link>>
 		<<case "Anti-Parasite Cream">>
-			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $sexStats.pills.pills[$pharmacyItem.type].owned += 1>><<boughtOnce>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $sexStats.pills.pills[$pharmacyItem.type].owned += 1>><<boughtOnce>><<replace #eMo-body>><<pillShop_content>><</replace>><<updatesidebarmoney>><</link>>
 		<<default>>
-			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $sexStats.pills.pills[$pharmacyItem.type].owned += 14>><<boughtOnce>><<replace #eMo-body>><<pillShop_content>><</replace>><</link>>
+			<<link L("eMo_groceryStore.buy")>><<set $money -= $pharmacyItem.price>><<set $sexStats.pills.pills[$pharmacyItem.type].owned += 14>><<boughtOnce>><<replace #eMo-body>><<pillShop_content>><</replace>><<updatesidebarmoney>><</link>>
 	<</switch>>
 	<<else>>
 		<span class="purple"><<=L("eMo_groceryStore.CosmeticsGenericDepartment5")>></span>
@@ -370,6 +267,7 @@
 		<<set _availableColours = _availableColours[0]>>
 	<</if>>
 
+	/* <<eMoTabs>> */
 	_textIntro
 	<<if _isConsumable isnot true>>
 		<<if $makeup.owned[_itemType].length > 0>>
@@ -423,6 +321,7 @@
 					<<replace #eMo-body>>
 						<<eMo_CosmeticsGenericDepartment _args[0] _args[1] _args[2] _args[3] _args[4] _args[5] _args[6] _args[7] _args[8] _args[9] _args[10] _args[11] _args[12]>>
 					<</replace>>
+					<<updatesidebarmoney>>
 				<</link>>
 			<<else>>
 				<<link L("eMo_groceryStore.buyhome")>>
@@ -431,10 +330,11 @@
 					<<replace #eMo-body>>
 						<<eMo_CosmeticsGenericDepartment _args[0] _args[1] _args[2] _args[3] _args[4] _args[5] _args[6] _args[7] _args[8] _args[9] _args[10] _args[11] _args[12]>>
 					<</replace>>
+					<<updatesidebarmoney>>
 				<</link>>
 			<</if>>
 		<<else>>
-			<span class="purple"><<print L(" eMo_groceryStore.CosmeticsGenericDepartment5")>></span>
+			<span class="purple"><<print L("eMo_groceryStore.CosmeticsGenericDepartment5")>></span>
 			<br><br>
 		<</if>>
 	<</if>>

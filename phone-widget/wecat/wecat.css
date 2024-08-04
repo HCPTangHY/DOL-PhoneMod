@@ -143,7 +143,7 @@
 
 .wecatchat-msg-right .wecatchat-msg-content:after {
     left: auto;
-    right: -10px;
+    right: -15px;
     border-right-color: transparent;
     border-left-color: #a4e564;
 }
@@ -151,6 +151,15 @@
 .wecatchat-msg-right {
     display: flex;
     justify-content: flex-end;
+}
+
+.wecatchat-msg-reply-buttom {
+    background-color: #fff;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
 }
 
 .wecatchat-footer {
@@ -195,4 +204,36 @@
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+}
+
+.wecatfriendAvatar-nav-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 0;
+    color: #232323;
+}
+
+.wecatfriendAvatar-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+}
+
+.wecatfriendAvatar-avatar:hover {
+    transform: scale(1.1);
+}
+
+.wecatfriendAvatar-nav-button {
+    font-size: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 10px;
+    color: #232323;
 }

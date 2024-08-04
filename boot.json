@@ -1,6 +1,6 @@
 {
     "modName": "PhoneMod",
-    "version": "PRE-0.0.3",
+    "version": "PRE-0.0.5",
     "scriptFileList_earlyload": [
         "earlyload/readData.js"
     ],
@@ -11,6 +11,7 @@
     "additionFile": [
         "localization/zh-CN/system.yml",
         "localization/zh-CN/BaileyDialogue.yml",
+        "localization/zh-CN/EdenDialogue.yml",
         "localization/zh-CN/testEvent2.yml"
     ],
     "addonPlugin": [{
@@ -49,7 +50,7 @@
         {
             "modName": "ModLoader DoL ImageLoaderHook",
             "addonName": "ImageLoaderAddon",
-            "modVersion": "2.10.7"
+            "modVersion": "2.11.0"
         }
     ],
     "dependenceInfo": [{
@@ -58,7 +59,7 @@
         },
         {
             "modName": "ModLoader DoL ImageLoaderHook",
-            "version": "2.10.7"
+            "version": "2.11.0"
         },
         {
             "modName": "ReplacePatcher",

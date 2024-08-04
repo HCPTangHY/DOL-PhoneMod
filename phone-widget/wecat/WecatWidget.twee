@@ -1,0 +1,232 @@
+:: Wecat Widget [widget]
+
+<<widget "wecat_content">>
+	<<run $(".phonebg").toggle();>>
+	<div id="wecatcontainer">
+		<div id="wecatheader"><h1><<=L('wecatTitle')>></h1></div>
+		<div id="wecatlist">
+			<<wecat_msgList>>
+		</div>
+		<div class="wecatfooter">
+			<h2><<link L('wecatMsgTitle')>>
+				<<replace #wecatlist>>
+					<<wecat_msgList>>
+				<</replace>>
+				<<replace #wecatheader>>
+					<h1><<=L('wecatTitle')>></h1>
+				<</replace>>
+			<</link>></h2>
+			<h2><<link L('wecatFriListTitle')>>
+				<<replace #wecatlist>>
+					<<wecat_friendlist>>
+				<</replace>>
+				<<replace #wecatheader>>
+					<h1><<=L('wecatFriListTitle')>></h1>
+				<</replace>>
+			<</link>></h2>
+        </div>
+	</div>
+<</widget>>
+
+<<widget "wecat_friendAvatar">>
+	<<set _npc = _args[0]>>
+	<<print "<img style='display: flex;  justify-content: center;align-items: center;' src='img/avatar/"+_npc+"/"+_npc+"_"+$chatList[_npc].avaterKey+".png'>">>
+<</widget>>
+
+<<widget "wecat_friendlist">>
+	<div class="wecatfriendlist-container">
+		<<for _i=0; _i < Object.keys($chatList).length; _i++ >>
+			<div class="wecatfriendlist-item">
+				<<wecat_friendAvatar _name>>
+				<h2>
+					<<print `<<link `+_name+`>>
+						<<replace #wecatcontainer>><<wecat_chat `+_name+`>><</replace>>
+					<</link>>`>>
+				</h2>
+        	</div>
+		<</for>>
+    </div>
+<</widget>>
+
+<<widget "wecat_msgList">>
+	<<for _i=0; _i<Object.keys($chatList).length; _i++>>
+		<<set _name=Object.keys($chatList)[_i]>>
+		<<if $chatList[_name].msgList.length!=0>>
+		<<print "<<link '<<wecat_msgList_item "+_name+">>'>><<replace #wecatcontainer>><<wecat_chat "+_name+">><</replace>><</link>>">>
+		<</if>>
+	<</for>>
+<</widget>>
+
+<<widget "wecat_msgList_item">>
+	<<set _name=_args[0]>>
+	<div class="wecatlist-item">
+		<div class="wecatlist-item-avatar">
+			<<wecat_friendAvatar _name>>
+		</div>
+		<div style=" flex: 1;">
+			<h2>_name</h2>
+			<p><<=L($chatList[_name].msgList[$chatList[_name].msgList.length-1].msg)>></p>
+		</div>
+		<div class="wecatlist-item-time">
+			<<set _time = $chatList[_name].msgList[$chatList[_name].msgList.length-1].sendTime>>
+			<<if _time[0]!=Time.year>><<=_time[0]>>/<</if>>
+			<<if _time[1]!=Time.mouth||_time[2]!=Time.mouthDay>>
+				<<=_time[1]>>/<<=_time[2]>>
+			<<else>>
+				<<=_time[3]>>:<<=_time[4].toString().length!=1?_time[4]:"0"+_time[4].toString()>>
+			<</if>>
+		</div>
+	</div>
+<</widget>>
+
+<<widget "wecat_chat">>
+	<<set _npc=_args[0]>>
+	<<if !$chatList[_npc]>>
+		<<set $chatList[_npc] to []>>
+	<</if>>
+	<div id="wecatchat-contenter">
+		<div class="wecatchat-header">
+            <span class="back-button" style="color: #2a323e;">
+			<<link "<">>
+				<<replace #phonecontents>>
+					<<wecat_content>>
+				<</replace>>
+			<</link>></span>
+            <span class="wecatchat-title">_npc</span>
+            <span class="menu-button" style="color: #2a323e;">
+			<<link"...">>
+				<<replace #phonecontents>>
+					<<wecat_chat_friDetail _npc>>
+				<</replace>>
+			<</link>></span>
+        </div>
+		<div class="wecatchat-content">
+		<<set _npcPool = window.PhoneModEvents.getNpcAllEvents(T.npc)>>
+		<<script>>
+			T.lastMsg = V.chatList[T.npc].msgList[V.chatList[T.npc].msgList.length-1];
+			if (T.lastMsg.sender!="Me"){
+				if (T.lastMsg.msg!=window.PhoneModEvents.events.get(T.npc).nowEventKey) {
+					window.PhoneModEvents.events.get(T.npc).nowEventKey = T.lastMsg.msg;
+				}
+			}
+		<</script>>
+		<<if _npcPool.get(window.PhoneModEvents.getNpcNowEventKey(_npc)) && T.lastMsg.sender!="Me">>
+			<<set _replies = _npcPool.get(window.PhoneModEvents.getNpcNowEventKey(_npc)).childEvents>>
+			<<set _replyKeys = T.replies.keys().toArray()>>
+			<<set _keys = []>>
+			<<script>>
+				for (let i=0; i<T.replyKeys.length;i++) {
+					if (T.replies.get(T.replyKeys[i]).condition()) {
+						T.keys.push(T.replyKeys[i])
+					}
+				}
+			<</script>>
+			<<set _replyKeys=_keys>>
+		<</if>>
+		<<for _i=0; _i<V.chatList[_npc].msgList.length; _i++>>
+			<<if V.chatList[_npc].msgList[_i].sender=="Me">>
+				<div class="wecatchat-msg-right">
+					<div class="wecatchat-msg-content">
+						<<=L(V.chatList[_npc].msgList[_i].msg)>>
+					</div>
+				</div>
+			<<else>>
+				<<set _text=L(V.chatList[_npc].msgList[_i].msg)>>
+				<<set _split = T.text.split("|")>>
+				<<for _j=0;_j<T.split.length;_j++>>
+					<div class="wecatchat-msg">
+						<div class="wecatchat-msg-content">
+							<<=_split[_j]>>
+						</div>
+					</div>
+				<</for>>
+			<</if>>
+		<</for>>
+		<<if _replies&&_replyKeys.length!=0>>
+			<div class="wecatchat-msg-right">
+				<div class="wecatchat-msg-content" style="width: 100%;" id="wecat-reply-div">
+				<<for _i=0; _i<T.replyKeys.length;_i++>>
+					<div class="wecatchat-msg-reply-buttom">
+						<<print "<<link L('"+T.replyKeys[T.i]+"')>>"+
+							"<<run $('#wecat-reply-div').hide()>>"+
+							"<<run window.send_msg('"+T.replyKeys[T.i]+"')>>"+
+							"<<run console.log('"+T.replyKeys[T.i]+"')>><</link>>">>
+					</div>
+				<</for>>
+				</div>
+			</div>
+		<</if>>
+        </div>
+		<div class="wecatchat-footer">
+			<select id='wecatchat-send'>
+			<<if window.PhoneModEvents.getNpcRestFlag(_npc)>>
+				<option disable value='npcrestNow'><<=L('npcrestNow')>></option>
+			<<else>>
+				<<if !_replies||_replyKeys.length==0||window.PhoneModEvents.getNpcNowEventKey(_npc)!="">>
+					<option value='selfieMsg'><<=L('selfieMsg')>></option>
+					<option value='greetingMsg'><<=L('greetingMsg')>></option>
+				<</if>>
+			<</if>>
+			</select>
+			<<if window.PhoneModEvents.getNpcRestFlag(_npc)>>
+            	<button style="color: #2a323e;">&gt;</button>
+			<<else>>
+				<button onclick="window.send_msg($('#wecatchat-send').val())" style="color: #2a323e;">&gt;</button>
+			<</if>>
+        </div>
+		<script>
+			var container = document.querySelector('.wecatchat-content');
+			container.scrollTop = container.scrollHeight;
+		</script>
+	</div>
+<</widget>>
+
+<<widget "wecat_chat_friDetail">>
+	<<set _npc = _args[0]>>
+	<<set _avatars = {
+		"Alex":{
+			"椒盐实验体":2
+		},
+		"Avery":{
+			"椒盐实验体":1
+		},
+		"Bailey":{
+			"椒盐实验体":2
+		},
+		"Harper":{
+			"椒盐实验体":1
+		},
+		"Kylar":{
+			"椒盐实验体":2
+		},
+		"Remy":{
+			"椒盐实验体":1
+		},
+		"Robin":{
+			"椒盐实验体":3
+		},
+		"Sydney":{
+			"椒盐实验体":2
+		},
+		"Whitney":{
+			"椒盐实验体":1
+		},
+		"Wren":{
+			"椒盐实验体":1
+		}
+	}>>
+	<div id="wecatchat-contenter" style="align-items: center;">
+		<<set _avatarAuth = $chatList[_npc].avaterKey.split("_")[0]>>
+		<<set _avatarIdx = $chatList[_npc].avaterKey.split("_")[1]>>
+		<div class="wecatfriendAvatar-nav-container">
+			<button class="wecatfriendAvatar-nav-button" id="prevAvatar">&lt;</button>
+			<div class="wecatfriendAvatar-avatar"><<wecat_friendAvatar _npc>></div>
+			<button class="wecatfriendAvatar-nav-button" id="nextAvatar">&gt;</button>
+		</div>
+		<div class="wecatfriendAvatar-nav-container">
+			<button class="wecatfriendAvatar-nav-button" id="prevStyle">&lt;</button>
+			<h2 id="currentStyle" style="color: #232323;">_avatarAuth</h2>
+			<button class="wecatfriendAvatar-nav-button" id="nextStyle">&gt;</button>
+		</div>
+	</div>
+<</widget>>

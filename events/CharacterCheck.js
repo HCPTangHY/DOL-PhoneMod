@@ -22,5 +22,10 @@ window.CharacterSchedule = {
         getResponseMinute() {
             return 2;
         }
+    },
+    Eden: {
+        getResponseMinute() {
+            return 2;
+        }
     }
 }

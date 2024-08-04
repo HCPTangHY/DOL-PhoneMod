@@ -1,0 +1,18 @@
+﻿zh-CN:
+ Eden_longTimeNoReturn: 嗯？看起来某些人是忘了些什么重要的约定呢。
+ Eden_longTimeNoReturn.A: 我不想回去
+ Eden_longTimeNoReturn.B: 伊甸？对……对不起
+ Eden_longTimeNoReturnA: 我们当初可是说好了
+ Eden_longTimeNoReturnA.A: 我知道，但是我不想回去<<lllove "Eden">>
+ Eden_longTimeNoReturnA.B: 对不起，但是这里的工作实在是太多了
+ Eden_longTimeNoReturnAA: 哼，那你就永远别回来
+ Eden_longTimeNoReturnAB: 这个说辞可有些敷衍。
+ Eden_longTimeNoReturnB: 道歉的话留到回来再说吧|你在那里遇到什么麻烦了吗？
+ Eden_longTimeNoReturnB.A: 没有的
+ Eden_longTimeNoReturnB.B: 这里…这里太可怕了<<lltrauma>>
+ Eden_longTimeNoReturnBA: 那就好|城市里危机四伏|还是早点回来为好
+ Eden_longTimeNoReturnBA.A: 嗯，我很快就会回来
+ Eden_longTimeNoReturnBAA: 我就在这等你|别让我等的太久|否则，我可不保证会不会做出什么“特别”的事情来奖励你呢。
+ Eden_longTimeNoReturnBB: 出了什么事|你还好吗
+ Eden_longTimeNoReturnBB.A: "[向伊甸诉说最近发生的事]<<lltrauma>>"
+ Eden_longTimeNoReturnBBA: ……|我……我不应该让你独自一人去那种地方的|那些家伙，我一定不会让他们好过|快点回来吧|家不会有任何的危险|那是只属于我们的一片天地

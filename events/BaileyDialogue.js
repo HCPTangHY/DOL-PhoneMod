@@ -1,4 +1,4 @@
-const E = {
+var E = {
     System_npcRest: {
         id: "System_npcRest",
         npc: "Bailey",
